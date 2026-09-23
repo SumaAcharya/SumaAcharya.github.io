@@ -8,12 +8,12 @@ layout: default
 
 <section class="hero wrap">
   <div class="hero-text">
-    <p class="hello"><span class="accent">Hel</span>lo, I'm <span class="wave">👋</span></p>
+    <p class="hello">Hello, I'm</p>
     <h1>Suma Acharya</h1>
     <p class="role">Undergrad in Electrical &amp; Electronics</p>
     <p class="intro">Engineering student curious about all things energy, from batteries and power systems to communication tech.</p>
     <div class="actions">
-      <a class="btn dark" href="#contact">Let's Talk</a>
+      <a class="btn dark" href="#contact">Get in Touch</a>
       <a class="btn-link" href="{{ '/cv/' | relative_url }}">View my CV →</a>
     </div>
     <p class="social">
@@ -27,25 +27,21 @@ layout: default
   <div class="portrait">
     <div class="portrait-glow"></div>
     {% if photo %}<img class="portrait-img" src="{{ photo.path | relative_url }}" alt="Suma Acharya">{% else %}<div class="portrait-img placeholder">SA</div>{% endif %}
-    <span class="badge b1">🔋 energy nerd</span>
-    <span class="badge b2">✏️ Whimsicature</span>
   </div>
 </section>
 
-<div class="strip" aria-label="Places and tools">
+<div class="strip" aria-label="Affiliations">
   <div class="strip-track">
-    {% for r in (1..2) %}
-    <span>⚡ IEEE CASS</span><span>🏛 NIE Mysuru</span><span>🏆 Infosys PALS</span><span>🎓 IIT Indore · SRS'25</span><span>📄 E3S Conferences</span><span>📚 Elsevier</span><span>📐 MATLAB</span><span>📡 ESP32 + LoRa</span>
-    {% endfor %}
+    <span>IEEE CASS, NISB</span><span>NIE Mysuru</span><span>IIT Indore · SRS'25</span><span>E3S Web of Conferences</span><span>Elsevier</span><span>Infosys PALS · Top 10</span>
   </div>
 </div>
 
 <section class="section wrap">
-  <p class="statement reveal">I'm fascinated by <span class="accent">energy-related tech</span>, whether it's batteries, power systems or communication. I love <span class="accent">exploring new technology, writing about it,</span> and getting lost in thriller series. When I'm not thinking about energy storage, you'll probably find me <span class="accent">drawing caricatures as Whimsicature</span> or hunting for good food.</p>
+  <p class="statement reveal">I'm fascinated by energy-related tech, whether it's batteries, power systems or communication. I love exploring new technology, writing about it, and getting lost in thriller series. When I'm not thinking about energy storage, you'll probably find me drawing caricatures as Whimsicature or hunting for good food.</p>
 </section>
 
 <section id="research" class="section wrap">
-  <div class="sec-head"><h2><span class="accent">Res</span>earch</h2><a class="pill" href="https://scholar.google.com/citations?user=WSwZorUAAAAJ&hl=en" target="_blank" rel="noopener">Google Scholar</a></div>
+  <div class="sec-head"><h2>Research</h2><a class="pill" href="https://scholar.google.com/citations?user=WSwZorUAAAAJ&hl=en" target="_blank" rel="noopener">Google Scholar</a></div>
   <div class="tags">
     <a href="https://scholar.google.com/citations?view_op=search_authors&hl=en&mauthors=label:energy_storage" target="_blank" rel="noopener">Energy Storage</a>
     <a href="https://scholar.google.com/citations?view_op=search_authors&hl=en&mauthors=label:aiml" target="_blank" rel="noopener">AIML</a>
@@ -73,7 +69,7 @@ layout: default
 </section>
 
 <section id="resume" class="section wrap">
-  <div class="sec-head"><h2><span class="accent">Res</span>ume</h2><a class="pill" href="{{ '/cv/' | relative_url }}">Full CV</a></div>
+  <div class="sec-head"><h2>Resume</h2><a class="pill" href="{{ '/cv/' | relative_url }}">Full CV</a></div>
   <div class="resume">
     <div>
       <h4>Education</h4>
@@ -95,8 +91,8 @@ layout: default
 </section>
 
 <section id="blog" class="section wrap">
-  <div class="sec-head"><h2><span class="accent">Tec</span>h Blog</h2></div>
-  <p class="note">notes from my notebook, updated whenever an idea won't leave me alone</p>
+  <div class="sec-head"><h2>Tech Blog</h2></div>
+  <p class="note">Articles and notes on energy storage, power systems and emerging technology.</p>
   <div class="notes">
     {% for post in site.posts %}
     <a class="note-card reveal" href="{{ post.external_url | default: post.url | relative_url }}"{% if post.external_url %} target="_blank" rel="noopener"{% endif %}>
@@ -115,7 +111,7 @@ layout: default
     {% if site.posts.size == 0 %}
     <div class="note-card soon">
       <span class="date">coming soon</span>
-      <h3>First blog entry on its way ✍️</h3>
+      <h3>First article coming soon</h3>
       <p>Energy storage, power systems and the tech I'm exploring.</p>
     </div>
     {% endif %}
@@ -123,8 +119,8 @@ layout: default
 </section>
 
 <section id="whimsicature" class="section wrap">
-  <div class="sec-head"><h2><span class="accent">Whi</span>msicature</h2><a class="pill" href="https://www.instagram.com/whimsicature/" target="_blank" rel="noopener">@whimsicature</a></div>
-  <p class="note">Somewhere between a portrait and a punchline :)</p>
+  <div class="sec-head"><h2>Whimsicature</h2><a class="pill" href="https://www.instagram.com/whimsicature/" target="_blank" rel="noopener">@whimsicature</a></div>
+  <p class="note">Somewhere between a portrait and a punchline :) Caricature work, also on Instagram.</p>
   <div class="board">
     {% for f in art %}
     {% assign t = f.basename | replace: '-', ' ' | replace: '_', ' ' | capitalize %}
@@ -139,8 +135,8 @@ layout: default
 
 <section id="contact" class="section wrap">
   <div class="contact reveal">
-    <p class="hello small"><span class="accent">Let's</span> talk 👋</p>
-    <h2>Research collabs, writing, caricature commissions or food recommendations</h2>
+    <p class="hello small">Get in touch</p>
+    <h2>Open to research collaborations, internships and technical writing opportunities.</h2>
     <a class="btn dark" href="mailto:suma.acharya40@gmail.com">suma.acharya40@gmail.com</a>
   </div>
 </section>
