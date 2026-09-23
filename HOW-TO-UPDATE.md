@@ -16,7 +16,13 @@ To list a post published elsewhere (Medium, LinkedIn…), add `external_url: htt
 
 The file name becomes the caption: `chai-and-chaos.jpg` shows as "Chai and chaos".
 
-## Add your photo / update your CV
-Upload to https://github.com/SumaAcharya/SumaAcharya.github.io/upload/main/assets
-- Photo: a square image named `profile.jpg`
-- CV: named `CV_Suma_Acharya.pdf` (replaces the current one)
+## Add your photo
+Upload a square photo named `profile.jpg` to https://github.com/SumaAcharya/SumaAcharya.github.io/upload/main/assets
+It appears as a polaroid in the top section.
+
+## Update your CV
+Your CV page is `cv.html`. Open https://github.com/SumaAcharya/SumaAcharya.github.io/edit/main/cv.html, change the text, and commit.
+Visitors can save it as a PDF with the "Download / Print PDF" button.
+
+## Optional: tags on a post
+Add `tags: [batteries, circuits]` under `description` to show tags on the post.

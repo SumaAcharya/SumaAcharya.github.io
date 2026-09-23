@@ -2,28 +2,52 @@
 layout: default
 ---
 {% assign photo = site.static_files | where: "path", "/assets/profile.jpg" | first %}
-<section class="intro wrap">
-  <div class="avatar">{% if photo %}<img src="{{ photo.path | relative_url }}" alt="Suma Acharya">{% else %}<span>SA</span>{% endif %}</div>
-  <div>
+{% assign art_all = site.static_files | where_exp: "f", "f.path contains '/whimsicature/'" %}
+{% assign art = "" | split: "" %}
+{% for f in art_all %}{% assign ext = f.extname | downcase %}{% if ext == '.jpg' or ext == '.jpeg' or ext == '.png' or ext == '.webp' or ext == '.gif' %}{% assign art = art | push: f %}{% endif %}{% endfor %}
+
+<section class="hero wrap">
+  <div class="hero-text">
+    <p class="hand hello">hello, I'm</p>
     <h1>Suma Acharya</h1>
-    <p class="role">Electrical &amp; Electronics Engineering · The National Institute of Engineering, Mysuru</p>
-    <p>I'm an engineering student with a research interest in energy storage, from magnesium-ion to solid-state batteries. I write about technology in my tech blog, and I draw caricatures under the name <a href="#whimsicature">Whimsicature</a>. I also serve as CASS Secretary of the IEEE Student Branch at NIE.</p>
+    <svg class="squiggle" viewBox="0 0 320 18" preserveAspectRatio="none" aria-hidden="true"><path d="M2 12 C 40 2, 80 18, 120 9 S 200 3, 240 11 S 300 14, 318 6" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"/></svg>
+    <p class="role">Undergrad in Electrical &amp; Electronics Engineering · The National Institute of Engineering, Mysuru</p>
+    <p class="lede">I research <strong>energy storage</strong>, write about <strong>technology</strong>, and draw <strong>caricatures</strong> of people who have no idea they're being sketched. Currently CASS Secretary at the IEEE Student Branch, NIE.</p>
     <div class="actions">
-      <a class="btn" href="{{ '/assets/CV_Suma_Acharya.pdf' | relative_url }}" target="_blank">View my CV</a>
-      <a class="btn ghost" href="mailto:suma.acharya40@gmail.com">Email me</a>
+      <a class="btn" href="{{ '/cv/' | relative_url }}">View my CV</a>
+      <a class="btn ghost" href="#blog">Read the Tech Blog</a>
     </div>
     <p class="social">
-      <a href="https://github.com/SumaAcharya" target="_blank" rel="noopener">GitHub</a> ·
-      <a href="https://scholar.google.com/citations?user=WSwZorUAAAAJ&hl=en" target="_blank" rel="noopener">Google Scholar</a> ·
-      <a href="https://linkedin.com/in/sumaacharya-50a802318" target="_blank" rel="noopener">LinkedIn</a> ·
-      <a href="https://orcid.org/0009-0000-4698-9860" target="_blank" rel="noopener">ORCID</a> ·
+      <a href="https://github.com/SumaAcharya" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://scholar.google.com/citations?user=WSwZorUAAAAJ&hl=en" target="_blank" rel="noopener">Scholar</a>
+      <a href="https://linkedin.com/in/sumaacharya-50a802318" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://orcid.org/0009-0000-4698-9860" target="_blank" rel="noopener">ORCID</a>
       <a href="https://www.instagram.com/whimsicature/" target="_blank" rel="noopener">Instagram</a>
+      <a href="mailto:suma.acharya40@gmail.com">Email</a>
     </p>
+  </div>
+  <div class="hero-art" aria-hidden="true">
+    {% if photo %}
+      <div class="polaroid p-main"><img src="{{ photo.path | relative_url }}" alt=""><span>that's me!</span></div>
+    {% endif %}
+    {% for f in art limit: 3 %}
+      {% assign t = f.basename | replace: '-', ' ' | replace: '_', ' ' | capitalize %}
+      <div class="polaroid p{{ forloop.index }}"><i class="tape"></i><img src="{{ f.path | relative_url }}" alt="" loading="lazy"><span>{{ t }}</span></div>
+    {% endfor %}
+    <span class="sticker s1">🔋 battery nerd</span>
+    <span class="sticker s2">✏️ ink &amp; ideas</span>
   </div>
 </section>
 
+<section class="now wrap">
+  <div class="now-card reveal"><span class="ico">⚡</span><h3>Researching</h3><p>Next-gen batteries: magnesium-ion and solid-state storage for electric transport.</p></div>
+  <div class="now-card reveal"><span class="ico">🎙️</span><h3>Leading</h3><p>CASS Secretary, IEEE Student Branch at NIE: workshops on op-amps, circuits &amp; signals.</p></div>
+  <div class="now-card reveal"><span class="ico">✍️</span><h3>Writing &amp; drawing</h3><p>Tech notes on the blog below, and caricatures over at <a href="#whimsicature">Whimsicature</a>.</p></div>
+</section>
+
 <section id="research" class="section wrap">
-  <h2>Research Interests</h2>
+  <div class="sec-head"><span class="num">01</span><h2>Research</h2></div>
+  <p class="hand note">things I can't stop reading about →</p>
   <div class="tags">
     <a href="https://scholar.google.com/citations?view_op=search_authors&hl=en&mauthors=label:energy_storage" target="_blank" rel="noopener">Energy Storage</a>
     <a href="https://scholar.google.com/citations?view_op=search_authors&hl=en&mauthors=label:aiml" target="_blank" rel="noopener">AIML</a>
@@ -31,39 +55,99 @@ layout: default
     <a href="https://scholar.google.com/citations?view_op=search_authors&hl=en&mauthors=label:energy_power" target="_blank" rel="noopener">Energy/Power</a>
     <a href="https://scholar.google.com/citations?view_op=search_authors&hl=en&mauthors=label:signal_processing" target="_blank" rel="noopener">Signal Processing</a>
   </div>
-  <p class="muted">You can find my publications and ongoing work on <a href="https://scholar.google.com/citations?user=WSwZorUAAAAJ&hl=en" target="_blank" rel="noopener">Google Scholar</a>.</p>
+  <div class="pubs">
+    <a class="pub reveal" href="https://www.e3s-conferences.org/articles/e3sconf/abs/2026/10/e3sconf_ispes2026_04006/e3sconf_ispes2026_04006.html" target="_blank" rel="noopener">
+      <span class="pub-tag">Scopus-indexed paper · 2026</span>
+      <h3>Prospective Competence of Magnesium-ion over Lithium-ion Batteries in Electric Propulsion</h3>
+      <p>E3S Web of Conferences · presented at ISPES 2025</p>
+    </a>
+    <div class="pub reveal">
+      <span class="pub-tag">Symposium talk · 2025</span>
+      <h3>Solid State Batteries: Engineering the Future of Electric Transportation</h3>
+      <p>IEEE Student Research Symposium (SRS'25), IIT Indore</p>
+    </div>
+    <div class="pub reveal">
+      <span class="pub-tag soft">Elsevier book chapters · forthcoming</span>
+      <h3>Natural Gas in Power Generation · ML-Driven Biofuel Optimization</h3>
+      <p>One in press, one under review</p>
+    </div>
+  </div>
+  <p class="more"><a href="https://scholar.google.com/citations?user=WSwZorUAAAAJ&hl=en" target="_blank" rel="noopener">See everything on Google Scholar →</a></p>
+</section>
+
+<section id="resume" class="section wrap">
+  <div class="sec-head"><span class="num">02</span><h2>Resume</h2></div>
+  <div class="resume">
+    <div class="col">
+      <h4 class="hand">education</h4>
+      <div class="item"><span class="when">2024 – 2028</span><b>B.E. Electrical &amp; Electronics</b><em>The National Institute of Engineering, Mysuru · CGPA 8.18</em></div>
+      <div class="item"><span class="when">2021 – 2023</span><b>Pre-University, PCMC</b><em>Gopalan PU College, Bangalore</em></div>
+      <h4 class="hand">leadership</h4>
+      <div class="item"><span class="when">2025 – now</span><b>CASS Secretary, NISB IEEE</b><em>Technical events, workshops &amp; coordination</em></div>
+      <div class="item"><span class="when">2025</span><b>Hardware Focus Group Lead</b><em>Ran "Electro Fusion", a 3-day hardware workshop</em></div>
+    </div>
+    <div class="col">
+      <h4 class="hand">things I've built</h4>
+      <div class="item"><span class="when">Sep 2025 · Top 10 / 100+</span><b>Safety Navigation App</b><em>Flutter + OpenStreetMap · Infosys PALS Hackathon, team lead</em></div>
+      <div class="item"><span class="when">May 2025</span><b>Wearable IoT Safety Device</b><em>ESP32 + LoRa + ThingSpeak · <a href="https://github.com/SumaAcharya/Women-Safety-Device/tree/main" target="_blank" rel="noopener">code</a></em></div>
+      <div class="item"><span class="when">May 2026</span><b>555-Timer LED Control &amp; Op-Amp Integrator</b><em>Power electronics lab projects</em></div>
+      <h4 class="hand">toolbox</h4>
+      <p class="toolbox">Python · C · MATLAB · Simulink · PSIM · LTspice · KiCad · Vivado · Flutter · GitHub</p>
+    </div>
+  </div>
+  <div class="actions center"><a class="btn" href="{{ '/cv/' | relative_url }}">Open full CV</a></div>
 </section>
 
 <section id="blog" class="section wrap">
-  <h2>Tech Blog</h2>
-  <ul class="posts">
-    {% for post in site.posts %}
-    <li>
-      <a href="{{ post.external_url | default: post.url | relative_url }}"{% if post.external_url %} target="_blank" rel="noopener"{% endif %}>{{ post.title }}</a>
+  <div class="sec-head"><span class="num">03</span><h2>Tech Blog</h2></div>
+  <p class="hand note">notes from my notebook, updated whenever an idea won't leave me alone</p>
+  {% assign posts = site.posts %}
+  {% if posts.size > 0 %}
+    {% assign first = posts.first %}
+    <a class="feature reveal" href="{{ first.external_url | default: first.url | relative_url }}"{% if first.external_url %} target="_blank" rel="noopener"{% endif %}>
+      <span class="pin" aria-hidden="true"></span>
+      <span class="label">latest entry</span>
+      <h3>{{ first.title }}</h3>
+      <p>{{ first.description | default: first.excerpt | strip_html | truncate: 180 }}</p>
+      <span class="meta">{{ first.date | date: '%d %b %Y' }} · {{ first.content | number_of_words | divided_by: 200 | plus: 1 }} min read{% if first.tags.size > 0 %} · {{ first.tags | join: ', ' }}{% endif %}</span>
+    </a>
+  {% endif %}
+  <div class="notes">
+    {% for post in posts offset: 1 %}
+    <a class="note-card reveal" href="{{ post.external_url | default: post.url | relative_url }}"{% if post.external_url %} target="_blank" rel="noopener"{% endif %}>
       <span class="date">{{ post.date | date: '%d %b %Y' }}</span>
-      {% if post.description %}<p>{{ post.description }}</p>{% endif %}
-    </li>
+      <h3>{{ post.title }}</h3>
+      <p>{{ post.description | default: post.excerpt | strip_html | truncate: 120 }}</p>
+    </a>
     {% endfor %}
-    <li>
-      <a href="https://drive.google.com/file/d/1O4umxoLqEZS5ql_iAa0vcaZlA25m2W7P/view?usp=sharing" target="_blank" rel="noopener">Cybersecurity and IoT Integrated Research</a>
-      <span class="date">2025</span>
-      <p>Published in the Annual Newsletter 2025 of the Deccterous Integrated Circuit Design Club, NIE.</p>
-    </li>
-  </ul>
+    <a class="note-card reveal" href="https://drive.google.com/file/d/1O4umxoLqEZS5ql_iAa0vcaZlA25m2W7P/view?usp=sharing" target="_blank" rel="noopener">
+      <span class="date">2025 · ICDC newsletter</span>
+      <h3>Cybersecurity and IoT Integrated Research</h3>
+      <p>Published in the Deccterous IC Design Club's Annual Newsletter.</p>
+    </a>
+  </div>
 </section>
 
 <section id="whimsicature" class="section wrap">
-  <h2>Whimsicature</h2>
-  <p class="tagline">Somewhere between a portrait and a punchline :)</p>
-  {% assign art = site.static_files | where_exp: "f", "f.path contains '/whimsicature/'" %}
-  <div class="gallery">
-    {% for f in art %}{% assign ext = f.extname | downcase %}{% if ext == '.jpg' or ext == '.jpeg' or ext == '.png' or ext == '.webp' or ext == '.gif' %}
+  <div class="sec-head"><span class="num">04</span><h2>Whimsicature</h2></div>
+  <p class="hand tagline">Somewhere between a portrait and a punchline :)</p>
+  <div class="wall">
+    {% for f in art %}
     {% assign t = f.basename | replace: '-', ' ' | replace: '_', ' ' | capitalize %}
-    <a class="art" href="{{ f.path | relative_url }}" data-title="{{ t }}">
+    <a class="art polaroid reveal" href="{{ f.path | relative_url }}" data-title="{{ t }}">
+      <i class="tape"></i>
       <img src="{{ f.path | relative_url }}" alt="{{ t }}, caricature by Suma Acharya" loading="lazy">
       <span>{{ t }}</span>
     </a>
-    {% endif %}{% endfor %}
+    {% endfor %}
   </div>
-  <p><a class="btn ghost" href="https://www.instagram.com/whimsicature/" target="_blank" rel="noopener">More on Instagram @whimsicature</a></p>
+  <div class="actions center"><a class="btn ghost" href="https://www.instagram.com/whimsicature/" target="_blank" rel="noopener">More on Instagram @whimsicature</a></div>
+</section>
+
+<section class="section wrap">
+  <div class="hello-card reveal">
+    <p class="hand">say hi!</p>
+    <h2>Research collabs, writing, caricature commissions or food recommendations</h2>
+    <div class="actions center"><a class="btn" href="mailto:suma.acharya40@gmail.com">suma.acharya40@gmail.com</a></div>
+  </div>
 </section>
