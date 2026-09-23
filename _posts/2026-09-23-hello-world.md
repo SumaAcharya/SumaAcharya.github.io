@@ -1,6 +1,6 @@
 ---
 title: "Hello, world: volts, sketches and everything in between"
-category: tech
+tags: [intro]
 description: Why this website exists, and what you'll find here.
 ---
 
