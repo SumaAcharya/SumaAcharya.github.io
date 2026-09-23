@@ -1,0 +1,9 @@
+---
+layout: default
+---
+<article class="article wrap">
+  <p class="muted"><a href="{{ '/#blog' | relative_url }}">← Tech Blog</a></p>
+  <h1>{{ page.title }}</h1>
+  <p class="date">{{ page.date | date: '%d %B %Y' }}</p>
+  {{ content }}
+</article>
