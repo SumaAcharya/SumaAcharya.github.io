@@ -12,4 +12,3 @@ The paper by Lu et al., caught my attention because it introduced me to how diff
 
 
 
-Start writing here. Use ## for headings, **bold**, and add images like ![caption](/whimsicature/your-image.jpg).
