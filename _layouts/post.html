@@ -2,8 +2,10 @@
 layout: default
 ---
 <article class="article wrap">
-  <p class="muted"><a href="{{ '/#blog' | relative_url }}">← Tech Blog</a></p>
+  <a class="back" href="{{ '/#blog' | relative_url }}">← back to the Tech Blog</a>
   <h1>{{ page.title }}</h1>
-  <p class="date">{{ page.date | date: '%d %B %Y' }}</p>
-  {{ content }}
+  <p class="meta">{{ page.date | date: '%d %B %Y' }} · {{ content | number_of_words | divided_by: 200 | plus: 1 }} min read{% if page.tags.size > 0 %} · {{ page.tags | join: ', ' }}{% endif %}</p>
+  <div class="body">
+    {{ content }}
+  </div>
 </article>
