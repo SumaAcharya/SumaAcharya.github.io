@@ -201,3 +201,21 @@ a.card:hover { transform: translateY(-4px); border-color: var(--ink); }
 .notes .note-card.reveal:not(.in) { opacity: 0; }
 .notes .note-card .date { display: inline-block; font-style: normal; font-size: 10.5px; letter-spacing: .06em; text-transform: uppercase; color: var(--accent); border: 1px solid rgba(181, 101, 63, .45); border-radius: 3px; padding: 1px 7px; margin-bottom: 4px; white-space: nowrap; max-width: 100%; overflow: hidden; text-overflow: ellipsis; background: rgba(252, 248, 241, .8); }
 @media (max-width: 520px) { .notes { padding: 36px 16px 26px; } }
+
+/* tech blog: coloured sticky notes */
+.notes .note-card { border: 0; border-radius: 2px 2px 3px 3px; padding: 30px 24px 26px;
+  background-image: linear-gradient(to bottom, rgba(0, 0, 0, .06) 0, rgba(0, 0, 0, 0) 20px);
+  box-shadow: 0 1px 1px rgba(0, 0, 0, .06), 0 14px 18px -8px rgba(50, 35, 15, .28); }
+.notes .note-card:nth-child(n)::before { display: none; }
+.notes .note-card::after { content: ""; position: absolute; right: 0; bottom: 0; width: 34px; height: 34px;
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, .07) 50%, rgba(255, 255, 255, .45) 100%);
+  border-top-left-radius: 4px; }
+.notes .note-card:nth-child(5n+1) { background-color: #fff1a6; }
+.notes .note-card:nth-child(5n+2) { background-color: #ffd8de; }
+.notes .note-card:nth-child(5n+3) { background-color: #d3efd3; }
+.notes .note-card:nth-child(5n+4) { background-color: #d2e7f7; }
+.notes .note-card:nth-child(5n) { background-color: #ffdcb9; }
+.notes .note-card:nth-child(3n) { transform: rotate(-1.6deg); }
+.notes .note-card p { color: #4f463f; }
+.notes .note-card .date { background: rgba(255, 255, 255, .55); border-color: rgba(120, 70, 40, .35); }
+.notes .note-card.in:hover { transform: rotate(0) translateY(-4px) scale(1.02); }
