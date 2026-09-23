@@ -182,3 +182,22 @@ a.card:hover { transform: translateY(-4px); border-color: var(--ink); }
 /* professional pass */
 .badge { display: none; }
 .strip-track { animation: none !important; }
+
+/* tech blog: graph-paper desk with taped notes */
+.notes { gap: 42px 30px; padding: 46px 30px 36px; border-radius: 14px; border: 1px solid #dccfbb;
+  background-color: #f8f4ea;
+  background-image: linear-gradient(rgba(125, 139, 106, .16) 1px, transparent 1px), linear-gradient(90deg, rgba(125, 139, 106, .16) 1px, transparent 1px), linear-gradient(rgba(125, 139, 106, .07) 1px, transparent 1px), linear-gradient(90deg, rgba(125, 139, 106, .07) 1px, transparent 1px);
+  background-size: 50px 50px, 50px 50px, 10px 10px, 10px 10px;
+  box-shadow: inset 0 0 26px rgba(80, 60, 30, .08); }
+.notes .note-card { border-radius: 3px; box-shadow: 0 12px 22px rgba(50, 35, 15, .16); }
+.notes .note-card::before { content: ""; position: absolute; top: -13px; left: 50%; width: 104px; height: 26px; margin-left: -52px; z-index: 2;
+  background: repeating-linear-gradient(135deg, rgba(255, 255, 255, .28) 0 6px, transparent 6px 12px), rgba(212, 162, 76, .62);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, .1); transform: rotate(-3deg); }
+.notes .note-card:nth-child(odd) { transform: rotate(-.8deg); }
+.notes .note-card:nth-child(even) { transform: rotate(.8deg); }
+.notes .note-card:nth-child(even)::before { background: repeating-linear-gradient(135deg, rgba(255, 255, 255, .28) 0 6px, transparent 6px 12px), rgba(125, 139, 106, .6); transform: rotate(2.5deg); }
+.notes .note-card:nth-child(3n)::before { background: repeating-linear-gradient(135deg, rgba(255, 255, 255, .28) 0 6px, transparent 6px 12px), rgba(181, 101, 63, .5); }
+.notes .note-card.in:hover { transform: rotate(0) translateY(-4px); z-index: 3; }
+.notes .note-card.reveal:not(.in) { opacity: 0; }
+.notes .note-card .date { display: inline-block; font-style: normal; font-size: 10.5px; letter-spacing: .06em; text-transform: uppercase; color: var(--accent); border: 1px solid rgba(181, 101, 63, .45); border-radius: 3px; padding: 1px 7px; margin-bottom: 4px; white-space: nowrap; max-width: 100%; overflow: hidden; text-overflow: ellipsis; background: rgba(252, 248, 241, .8); }
+@media (max-width: 520px) { .notes { padding: 36px 16px 26px; } }
