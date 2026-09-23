@@ -5,6 +5,8 @@ url: https://sumaacharya.github.io
 baseurl: ""
 
 markdown: kramdown
+future: true
+timezone: Asia/Kolkata
 permalink: /blog/:year/:month/:title/
 
 defaults:
