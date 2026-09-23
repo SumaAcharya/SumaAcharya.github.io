@@ -1,0 +1,69 @@
+---
+layout: default
+---
+{% assign photo = site.static_files | where: "path", "/assets/profile.jpg" | first %}
+<section class="intro wrap">
+  <div class="avatar">{% if photo %}<img src="{{ photo.path | relative_url }}" alt="Suma Acharya">{% else %}<span>SA</span>{% endif %}</div>
+  <div>
+    <h1>Suma Acharya</h1>
+    <p class="role">Electrical &amp; Electronics Engineering · The National Institute of Engineering, Mysuru</p>
+    <p>I'm an engineering student with a research interest in energy storage, from magnesium-ion to solid-state batteries. I write about technology in my tech blog, and I draw caricatures under the name <a href="#whimsicature">Whimsicature</a>. I also serve as CASS Secretary of the IEEE Student Branch at NIE.</p>
+    <div class="actions">
+      <a class="btn" href="{{ '/assets/CV_Suma_Acharya.pdf' | relative_url }}" target="_blank">View my CV</a>
+      <a class="btn ghost" href="mailto:suma.acharya40@gmail.com">Email me</a>
+    </div>
+    <p class="social">
+      <a href="https://github.com/SumaAcharya" target="_blank" rel="noopener">GitHub</a> ·
+      <a href="https://scholar.google.com/citations?user=WSwZorUAAAAJ&hl=en" target="_blank" rel="noopener">Google Scholar</a> ·
+      <a href="https://linkedin.com/in/sumaacharya-50a802318" target="_blank" rel="noopener">LinkedIn</a> ·
+      <a href="https://orcid.org/0009-0000-4698-9860" target="_blank" rel="noopener">ORCID</a> ·
+      <a href="https://www.instagram.com/whimsicature/" target="_blank" rel="noopener">Instagram</a>
+    </p>
+  </div>
+</section>
+
+<section id="research" class="section wrap">
+  <h2>Research Interests</h2>
+  <div class="tags">
+    <a href="https://scholar.google.com/citations?view_op=search_authors&hl=en&mauthors=label:energy_storage" target="_blank" rel="noopener">Energy Storage</a>
+    <a href="https://scholar.google.com/citations?view_op=search_authors&hl=en&mauthors=label:aiml" target="_blank" rel="noopener">AIML</a>
+    <a href="https://scholar.google.com/citations?view_op=search_authors&hl=en&mauthors=label:sustainability" target="_blank" rel="noopener">Sustainability</a>
+    <a href="https://scholar.google.com/citations?view_op=search_authors&hl=en&mauthors=label:energy_power" target="_blank" rel="noopener">Energy/Power</a>
+    <a href="https://scholar.google.com/citations?view_op=search_authors&hl=en&mauthors=label:signal_processing" target="_blank" rel="noopener">Signal Processing</a>
+  </div>
+  <p class="muted">You can find my publications and ongoing work on <a href="https://scholar.google.com/citations?user=WSwZorUAAAAJ&hl=en" target="_blank" rel="noopener">Google Scholar</a>.</p>
+</section>
+
+<section id="blog" class="section wrap">
+  <h2>Tech Blog</h2>
+  <ul class="posts">
+    {% for post in site.posts %}
+    <li>
+      <a href="{{ post.external_url | default: post.url | relative_url }}"{% if post.external_url %} target="_blank" rel="noopener"{% endif %}>{{ post.title }}</a>
+      <span class="date">{{ post.date | date: '%d %b %Y' }}</span>
+      {% if post.description %}<p>{{ post.description }}</p>{% endif %}
+    </li>
+    {% endfor %}
+    <li>
+      <a href="https://drive.google.com/file/d/1O4umxoLqEZS5ql_iAa0vcaZlA25m2W7P/view?usp=sharing" target="_blank" rel="noopener">Cybersecurity and IoT Integrated Research</a>
+      <span class="date">2025</span>
+      <p>Published in the Annual Newsletter 2025 of the Deccterous Integrated Circuit Design Club, NIE.</p>
+    </li>
+  </ul>
+</section>
+
+<section id="whimsicature" class="section wrap">
+  <h2>Whimsicature</h2>
+  <p class="tagline">Somewhere between a portrait and a punchline :)</p>
+  {% assign art = site.static_files | where_exp: "f", "f.path contains '/whimsicature/'" %}
+  <div class="gallery">
+    {% for f in art %}{% assign ext = f.extname | downcase %}{% if ext == '.jpg' or ext == '.jpeg' or ext == '.png' or ext == '.webp' or ext == '.gif' %}
+    {% assign t = f.basename | replace: '-', ' ' | replace: '_', ' ' | capitalize %}
+    <a class="art" href="{{ f.path | relative_url }}" data-title="{{ t }}">
+      <img src="{{ f.path | relative_url }}" alt="{{ t }}, caricature by Suma Acharya" loading="lazy">
+      <span>{{ t }}</span>
+    </a>
+    {% endif %}{% endfor %}
+  </div>
+  <p><a class="btn ghost" href="https://www.instagram.com/whimsicature/" target="_blank" rel="noopener">More on Instagram @whimsicature</a></p>
+</section>

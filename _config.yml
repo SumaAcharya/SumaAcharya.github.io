@@ -1,0 +1,19 @@
+title: Suma Acharya
+description: Electrical & Electronics engineering student, researcher, writer and caricaturist.
+author: Suma Acharya
+url: https://sumaacharya.github.io
+baseurl: ""
+
+markdown: kramdown
+permalink: /blog/:year/:month/:title/
+
+defaults:
+  - scope:
+      path: ""
+      type: posts
+    values:
+      layout: post
+
+exclude:
+  - README.md
+  - HOW-TO-UPDATE.md
