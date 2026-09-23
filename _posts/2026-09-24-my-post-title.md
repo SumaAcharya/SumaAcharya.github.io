@@ -1,0 +1,15 @@
+---
+title: MIMO-PLC
+description: Communication innovation in power lines
+---
+## Research Paper : DAY 1 of Learning Through Research
+
+**Self-interference suppression in MIMO power line communication based on spatial linear projection filter**
+Source: [Lu et al., *Scientific Reports* (2026)](https://www.nature.com/articles/s41598-026-66731-7)
+
+The paper by Lu et al., caught my attention because it introduced me to how different signal-processing concepts can work together in Power Line Communication (PLC). OFDM (Orthogonal Frequency Division Multiplexing) divides data into multiple closely spaced subcarriers, allowing information to be transmitted efficiently over a channel with interference and distortion. The paper further uses spatial signal processing, where signals received through multiple communication paths are processed based on their spatial characteristics. The Spatial Linear Projection Filter (SLPF) essentially projects the received signal onto a desired signal space while reducing components associated with interference. I found the geometric interpretation of this process particularly intriguing, as it helped me visualize how unwanted signal components can be separated mathematically.
+
+
+
+
+Start writing here. Use ## for headings, **bold**, and add images like ![caption](/whimsicature/your-image.jpg).
