@@ -91,6 +91,7 @@ layout: default
   <div class="board">
     {% for f in art %}
     {% assign t = f.basename | replace: '-', ' ' | replace: '_', ' ' | capitalize %}
+    {% if site.data.captions and site.data.captions[f.basename] %}{% assign t = site.data.captions[f.basename] %}{% endif %}
     <a class="art polaroid reveal" href="{{ f.path | relative_url }}" data-title="{{ t }}">
       <i class="pin"></i>
       <img src="{{ f.path | relative_url }}" alt="{{ t }}, caricature by Suma Acharya" loading="lazy">
