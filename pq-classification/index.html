@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PQ Disturbance Classification</title>
+<style>
+:root { --bg: #f7f8fa; --panel: #ffffff; --ink: #1d2328; --muted: #5b6670; --rule: #dfe3e7; --accent: #1f5f8b; --accent2: #2e8b6f; --warn: #fff4e5; --warnline: #b8432a; color-scheme: light; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { --bg: #12171b; --panel: #1a2127; --ink: #e6ebef; --muted: #9aa6b0; --rule: #2c3640; --accent: #8bbcdf; --accent2: #6fcfae; --warn: #2b2416; --warnline: #e8775c; color-scheme: dark; }
+}
+:root[data-theme="dark"] { --bg: #12171b; --panel: #1a2127; --ink: #e6ebef; --muted: #9aa6b0; --rule: #2c3640; --accent: #8bbcdf; --accent2: #6fcfae; --warn: #2b2416; --warnline: #e8775c; color-scheme: dark; }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.6 system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 28px; }
+main { max-width: 980px; margin: 0 auto; display: flex; flex-direction: column; gap: 18px; }
+header h1 { font-size: 28px; margin: 0 0 6px; line-height: 1.25; }
+header p { margin: 0; color: var(--muted); }
+section { background: var(--panel); border: 1px solid var(--rule); border-radius: 12px; padding: 22px 24px; }
+h2 { font-size: 20px; margin: 0 0 10px; color: var(--accent); }
+h3 { font-size: 16px; margin: 16px 0 6px; }
+p { margin: 0 0 10px; }
+ul { margin: 0 0 8px; padding-left: 20px; }
+li { margin-bottom: 5px; }
+.kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-top: 4px; }
+.kpi { border: 1px solid var(--rule); border-radius: 10px; padding: 12px 14px; }
+.kpi .v { font-size: 26px; font-weight: 700; color: var(--accent2); line-height: 1.2; }
+.kpi .k { font-size: 13px; color: var(--muted); }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+@media (max-width: 760px) { .grid2 { grid-template-columns: 1fr; } }
+.chart { position: relative; height: 280px; width: 100%; }
+.chart.tall { height: 320px; }
+.note { font-size: 14px; color: var(--muted); margin: 0 0 8px; }
+.warn { background: var(--warn); border-left: 3px solid var(--warnline); border-radius: 8px; padding: 12px 14px; }
+.table-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 15px; }
+th, td { text-align: left; padding: 8px; border-bottom: 1px solid var(--rule); }
+th { color: var(--muted); font-weight: 600; font-size: 13px; }
+td.n, th.n { text-align: right; font-variant-numeric: tabular-nums; }
+.cm td { text-align: center; font-variant-numeric: tabular-nums; }
+.cm td.diag { font-weight: 700; }
+code { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 13px; background: var(--bg); padding: 2px 5px; border-radius: 4px; }
+pre { background: var(--bg); border: 1px solid var(--rule); border-radius: 8px; padding: 12px 14px; overflow-x: auto; font-size: 13.5px; margin: 8px 0 0; }
+footer { font-size: 13px; color: var(--muted); text-align: center; padding: 4px 0 10px; }
+a { color: var(--accent); }
+</style>
+</head>
+<body>
+<main>
+
+<header>
+  <h1>Power Quality Disturbance Classification</h1>
+  <p>A decision tree trained on two public Mendeley datasets, run in MATLAB. Simulated data.</p>
+</header>
+
+<section>
+  <h2>Summary</h2>
+  <div class="kpis">
+    <div class="kpi"><div class="v">100%</div><div class="k">Wavelet, 7 classes, holdout</div></div>
+    <div class="kpi"><div class="v">98.80%</div><div class="k">Wavelet, 7 classes, 5-fold CV</div></div>
+    <div class="kpi"><div class="v">98.67%</div><div class="k">FFT (STFT), holdout (2 wrong of 150)</div></div>
+    <div class="kpi"><div class="v">99.80%</div><div class="k">FFT (STFT), 5-fold CV</div></div>
+  </div>
+</section>
+
+<section>
+  <h2>The data</h2>
+  <ul>
+    <li><b>Wavelet dataset (PQ Disturbances V4):</b> 750 rows, 72 wavelet statistics each. 414 rows belong to the 7 single-event classes.</li>
+    <li><b>FFT dataset (PQ Issues Using STFT V2):</b> 500 rows, 794 STFT values each. It has 5 codes (0 to 4), 100 rows each. The file doesn't name them.</li>
+  </ul>
+  <p class="note">Both are public Mendeley Data sets, downloaded and used as published. Each row holds derived features, not raw waveforms.</p>
+</section>
+
+<section>
+  <h2>How it was tested</h2>
+  <ul>
+    <li><b>Holdout:</b> 70% of rows to train, 30% kept aside for testing (seed 42, same class mix in both parts).</li>
+    <li><b>5-fold cross-validation:</b> the data is cut into 5 parts, each tested once, and the scores are averaged.</li>
+    <li><b>10 repeated splits:</b> the holdout test is repeated with 10 random seeds, to see how much the score moves.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>Results</h2>
+  <div class="table-wrap">
+  <table>
+    <tr><th>Dataset</th><th class="n">Holdout</th><th class="n">5-fold CV</th><th class="n">10 splits (mean)</th></tr>
+    <tr><td>Wavelet, 7 classes (414 rows)</td><td class="n">100.00%</td><td class="n">98.80% ± 1.20</td><td class="n">98.39%</td></tr>
+    <tr><td>Wavelet, 13 labels (750 rows)</td><td class="n">97.78%</td><td class="n">98.27% ± 2.03</td><td class="n">98.09%</td></tr>
+    <tr><td>FFT (STFT), codes 0 to 4 (500 rows)</td><td class="n">98.67%</td><td class="n">99.80%</td><td class="n">99.67%</td></tr>
+  </table>
+  </div>
+  <p class="note">All numbers are from MATLAB runs. "± 1.20" is the spread across the 5 folds.</p>
+
+  <div class="grid2">
+    <div>
+      <h3>Accuracy by dataset</h3>
+      <div class="chart"><canvas id="accChart" role="img" aria-label="Bar chart of holdout and 5-fold CV accuracy for each dataset"></canvas></div>
+    </div>
+    <div>
+      <h3>Score across 10 random splits</h3>
+      <div class="chart"><canvas id="splitChart" role="img" aria-label="Line chart of holdout accuracy over 10 random splits"></canvas></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>Wavelet route: what the tree used</h2>
+  <div class="grid2">
+    <div>
+      <h3>Top features by importance</h3>
+      <div class="chart"><canvas id="impChart" role="img" aria-label="Horizontal bar chart of the six most important wavelet features"></canvas></div>
+    </div>
+    <div>
+      <h3>One statistic family alone (5-fold CV)</h3>
+      <div class="chart"><canvas id="famChart" role="img" aria-label="Bar chart of cross-validated accuracy for each wavelet statistic family"></canvas></div>
+      <p class="note">Entropy scores 100%, but its values barely change within a class, so treat that number with caution.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>FFT route (STFT): what the codes look like</h2>
+  <div class="grid2">
+    <div>
+      <h3>Average feature value per block</h3>
+      <div class="chart tall"><canvas id="profChart" role="img" aria-label="Log-scale line chart of average feature values per block for STFT codes 0 to 4"></canvas></div>
+      <p class="note">Log scale. Codes 0 and 1 are strong in the first 120 features. Codes 2 to 4 are near zero. Values too small to show sit at the bottom.</p>
+    </div>
+    <div>
+      <h3>Confusion matrix (holdout, 150 rows)</h3>
+      <div class="table-wrap">
+      <table class="cm">
+        <tr><th>True \ guessed</th><th class="n">0</th><th class="n">1</th><th class="n">2</th><th class="n">3</th><th class="n">4</th></tr>
+        <tr><td>0</td><td class="diag">30</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+        <tr><td>1</td><td>0</td><td class="diag">30</td><td>0</td><td>0</td><td>0</td></tr>
+        <tr><td>2</td><td>0</td><td>0</td><td class="diag">30</td><td>0</td><td>0</td></tr>
+        <tr><td>3</td><td>0</td><td>0</td><td>0</td><td class="diag">29</td><td>1</td></tr>
+        <tr><td>4</td><td>0</td><td>0</td><td>0</td><td>1</td><td class="diag">29</td></tr>
+      </table>
+      </div>
+      <p class="note">Only errors: one code 3 guessed as 4, and one code 4 guessed as 3.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>Customer report</h2>
+  <p>A script writes one row per test case with the predicted class and a suggested action, such as a DVR for a sag or a UPS for an interruption. It also writes a plain-text summary. The actions are indicative only.</p>
+  <div class="warn">
+    <p style="margin:0"><b>Not yet run.</b> The report's numbers and graphs will be added after the MATLAB run.</p>
+  </div>
+</section>
+
+<section>
+  <h2>What is not covered</h2>
+  <ul>
+    <li><b>Hybrid FFT + DWT test:</b> not possible on these datasets. It needs both feature types from the same raw signals.</li>
+    <li><b>Severity scoring:</b> not included. It needs measured magnitude and duration, which the data does not contain.</li>
+    <li><b>Field validation:</b> none. Real recordings with noise and overlapping events have not been tested.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>Run in MATLAB</h2>
+  <pre>cd('/Users/suma/Hybrid_PQ_Project/clean_mendeley_project')
+clear functions
+run_mendeley_project      % wavelet results
+run_stft_benchmark        % FFT results
+run_mendeley_report       % customer report</pre>
+</section>
+
+<footer>
+  Datasets: Veeramsetty et al. (2026), PQ Disturbances Dataset V4, Mendeley Data, DOI 10.17632/nkdpg8mn4f.4 (CC BY 4.0). Veeramsetty, Madgula and Durgam (2026), PQ Issues Using STFT V2, Mendeley Data, DOI 10.17632/w36rk7vh93.2 (CC BY 4.0).
+</footer>
+
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+(function () {
+  if (typeof Chart === 'undefined') return;
+  var theme = document.documentElement.getAttribute('data-theme');
+  var dark = theme ? theme === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
+  var ink = dark ? '#e6ebef' : '#1d2328';
+  var muted = dark ? '#9aa6b0' : '#5b6670';
+  var grid = dark ? '#2c3640' : '#dfe3e7';
+  var blue = dark ? '#8bbcdf' : '#1f5f8b';
+  var green = dark ? '#6fcfae' : '#2e8b6f';
+  var red = dark ? '#e8775c' : '#b8432a';
+  Chart.defaults.color = muted;
+  Chart.defaults.borderColor = grid;
+
+  function axes(min, max, title) {
+    return {
+      x: { grid: { display: false }, ticks: { color: muted } },
+      y: { min: min, max: max, grid: { color: grid }, ticks: { color: muted },
+           title: { display: !!title, text: title || '', color: muted } }
+    };
+  }
+
+  new Chart(document.getElementById('accChart'), {
+    type: 'bar',
+    data: { labels: ['Wavelet, 7 classes', 'Wavelet, 13 labels', 'FFT (STFT), 5 codes'],
+      datasets: [
+        { label: 'Holdout (%)', data: [100, 97.78, 98.67], backgroundColor: blue, borderRadius: 3 },
+        { label: '5-fold CV (%)', data: [98.80, 98.27, 99.80], backgroundColor: green, borderRadius: 3 }
+      ] },
+    options: { responsive: true, maintainAspectRatio: false,
+      scales: axes(95, 101, 'Accuracy (%)'),
+      plugins: { legend: { labels: { color: ink } },
+        tooltip: { callbacks: { label: function (c) { return c.dataset.label + ': ' + c.parsed.y.toFixed(2) + '%'; } } } } }
+  });
+
+  new Chart(document.getElementById('splitChart'), {
+    type: 'line',
+    data: { labels: ['1','2','3','4','5','6','7','8','9','10'],
+      datasets: [
+        { label: 'Wavelet, 7 classes', data: [100,95.161,100,100,98.387,95.968,97.581,98.387,99.194,99.194], borderColor: blue, backgroundColor: blue, tension: 0.2, pointRadius: 3, borderWidth: 2 },
+        { label: 'FFT (STFT)', data: [100,100,98.67,100,98.67,100,100,100,99.33,100], borderColor: green, backgroundColor: green, tension: 0.2, pointRadius: 3, borderWidth: 2, borderDash: [5,4] }
+      ] },
+    options: { responsive: true, maintainAspectRatio: false,
+      interaction: { mode: 'index', intersect: false },
+      scales: Object.assign(axes(94, 101, 'Holdout accuracy (%)'), {
+        x: { title: { display: true, text: 'Random split number', color: muted }, grid: { display: false }, ticks: { color: muted } } }),
+      plugins: { legend: { labels: { color: ink } },
+        tooltip: { callbacks: { label: function (c) { return c.dataset.label + ': ' + c.parsed.y.toFixed(2) + '%'; } } } } }
+  });
+
+  new Chart(document.getElementById('impChart'), {
+    type: 'bar',
+    data: { labels: ['Mean-d4','Skewness-A8','Range-d1','Range-d6','Mean-d7','Mean-d1'],
+      datasets: [{ label: 'Importance', data: [0.02693,0.02601,0.02372,0.02341,0.02252,0.01979], backgroundColor: blue, borderRadius: 3 }] },
+    options: { responsive: true, maintainAspectRatio: false, indexAxis: 'y',
+      scales: { x: { grid: { color: grid }, ticks: { color: muted } }, y: { grid: { display: false }, ticks: { color: ink } } },
+      plugins: { legend: { display: false },
+        tooltip: { callbacks: { label: function (c) { return 'Importance ' + c.parsed.x.toFixed(4); } } } } }
+  });
+
+  var famNames = ['Mean','Std','RMS','Energy','Entropy','Kurtosis','Skewness','Range'];
+  var famAcc = [97.34,96.86,96.62,93.73,100,99.52,99.27,99.04];
+  new Chart(document.getElementById('famChart'), {
+    type: 'bar',
+    data: { labels: famNames, datasets: [{ label: 'CV accuracy (%)', data: famAcc,
+      backgroundColor: famNames.map(function (n) { return n === 'Entropy' ? red : blue; }), borderRadius: 3 }] },
+    options: { responsive: true, maintainAspectRatio: false,
+      scales: axes(90, 101, '5-fold CV accuracy (%)'),
+      plugins: { legend: { display: false },
+        tooltip: { callbacks: { label: function (c) { return c.parsed.y.toFixed(2) + '%'; } } } } }
+  });
+
+  var bands = ['1-40','41-80','81-120','121-160','161-200','201-240','241-280','281-320','321-360','361-400','401-440','441-480','481-520','521-560','561-599','600-638','639-677','678-716','717-755','756-794'];
+  function floorLog(a) { return a.map(function (v) { return Math.max(v, 0.001); }); }
+  new Chart(document.getElementById('profChart'), {
+    type: 'line',
+    data: { labels: bands, datasets: [
+      { label: 'Code 0', data: floorLog([3.09,31.82,78.15,76.39,28.96,1.4,0.68,0.42,0.24,0.23,0.18,0.15,0.13,0.11,0.1,0.07,0.09,0.09,0.08,0.07]), borderColor: blue, backgroundColor: blue, tension: 0.2, pointRadius: 2, borderWidth: 2 },
+      { label: 'Code 1', data: floorLog([2.56,39.43,94.47,84.42,28.64,1.2,0.57,0.36,0.19,0.2,0.16,0.13,0.11,0.09,0.09,0.06,0.08,0.07,0.07,0.06]), borderColor: green, backgroundColor: green, tension: 0.2, pointRadius: 2, borderWidth: 2, borderDash: [5,4] },
+      { label: 'Code 2', data: floorLog([0.03,0.02,0.01,0.01,0.01,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]), borderColor: red, backgroundColor: red, tension: 0.2, pointRadius: 2, borderWidth: 2 },
+      { label: 'Code 3', data: floorLog([0.02,0.01,0.01,0,0,0,0,0,0,0.01,0,0,0,0,0,0,0,0,0,0]), borderColor: muted, backgroundColor: muted, tension: 0.2, pointRadius: 2, borderWidth: 2, borderDash: [2,3] },
+      { label: 'Code 4', data: floorLog([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]), borderColor: ink, backgroundColor: ink, tension: 0.2, pointRadius: 2, borderWidth: 1, borderDash: [8,3] }
+    ] },
+    options: { responsive: true, maintainAspectRatio: false,
+      interaction: { mode: 'index', intersect: false },
+      scales: {
+        x: { grid: { display: false }, ticks: { color: muted, maxRotation: 60 }, title: { display: true, text: 'Block of feature numbers', color: muted } },
+        y: { type: 'logarithmic', min: 0.001, max: 100, grid: { color: grid }, ticks: { color: muted },
+             title: { display: true, text: 'Average value (log scale)', color: muted } }
+      },
+      plugins: { legend: { labels: { color: ink } },
+        tooltip: { callbacks: { label: function (c) { return c.dataset.label + ': ' + c.parsed.y.toFixed(3); } } } } }
+  });
+})();
+</script>
+</body>
+</html>
