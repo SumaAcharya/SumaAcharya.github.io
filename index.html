@@ -85,6 +85,21 @@ layout: default
   </div>
 </section>
 
+<section id="linkedin" class="section wrap">
+  <div class="sec-head"><h2>LinkedIn Posts</h2><a class="pill" href="https://linkedin.com/in/sumaacharya-50a802318" target="_blank" rel="noopener">Follow on LinkedIn</a></div>
+  <p class="note">Updates, certifications and milestones I've shared on LinkedIn.</p>
+  <div class="li-posts">
+    {% for p in site.data.linkedin %}
+    <a class="li-card reveal" href="{{ p.url }}" target="_blank" rel="noopener">
+      <span class="li-top"><span class="li-badge">in</span><span class="li-date">{{ p.date }} · View on LinkedIn ↗</span></span>
+      <h3>{{ p.title }}</h3>
+      <p>{{ p.summary }}</p>
+      {% if p.tags %}<span class="ptags">{% for t in p.tags %}<i>#{{ t }}</i>{% endfor %}</span>{% endif %}
+    </a>
+    {% endfor %}
+  </div>
+</section>
+
 <section id="whimsicature" class="section wrap">
   <div class="sec-head"><h2>Whimsicature</h2><a class="pill" href="https://www.instagram.com/whimsicature/" target="_blank" rel="noopener">@whimsicature</a></div>
   <p class="note">Somewhere between a portrait and a punchline :) Caricature work, also on Instagram.</p>
