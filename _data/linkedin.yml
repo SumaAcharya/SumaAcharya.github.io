@@ -1,7 +1,20 @@
-# LinkedIn posts shown in the "LinkedIn Posts" section of the homepage.
+# Posts shown in the "Posts" section of the homepage.
 # Newest first. To add one, copy a block below and change the details.
+# url: paste the post's link (on LinkedIn: "..." > "Copy link to post").
 - title: "NPTEL Elite Certification · Principles of Functional Materials Synthesis"
   date: "Nov 2026"
   summary: "An IISc Bengaluru course by Prof. Pavan Nukala (CeNSE): Ellingham diagrams, thin-film deposition, semiconductor fabrication, phase-change memory and X-ray diffraction."
   tags: [IISc, FunctionalMaterials, ContinuousLearning]
   url: https://lnkd.in/p/gEawswMv
+
+- title: "After AI, the next wave is already here · CASIF-2026 Quantum Ignite"
+  date: "Sep 2026"
+  summary: "Takeaways from IEEE CAS Bangalore's quantum computing event: hybrid quantum-classical systems and near-term uses in finance, energy, healthcare and communication."
+  tags: [QuantumComputing, DeepTech, IEEE, CASIF2026]
+  url: https://www.linkedin.com/in/sumaacharya-50a802318/recent-activity/all/
+
+- title: "Team NIE · Top 10 Finalist at Infosys PALS Hackathon"
+  date: "Sep 2025"
+  summary: "Led Team Arjuna to the top 10 of 88 submissions in Mahindra City, Chennai with ResQ Path, an AI-driven safety navigation app. Shared by NIE Mysuru."
+  tags: [InfosysPALS, Hackathon, AIInnovation, TechForGood]
+  url: https://www.linkedin.com/in/sumaacharya-50a802318/recent-activity/all/
