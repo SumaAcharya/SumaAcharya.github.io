@@ -96,6 +96,7 @@ a { color: var(--accent); }
   <div class="grid2">
     <div>
       <h3>Accuracy by dataset</h3>
+      <p class="note"><a href="https://matlab.mathworks.com/open/github/v1?repo=SumaAcharya/MinorProject&amp;file=run_all.m" target="_blank" rel="noopener">Open this graph in MATLAB Online</a> (needs a free MathWorks account; opens a copy of the code, not the GitHub repo).</p>
       <div class="chart"><canvas id="accChart" role="img" aria-label="Bar chart of holdout and 5-fold CV accuracy for each dataset"></canvas></div>
     </div>
     <div>
@@ -148,8 +149,20 @@ a { color: var(--accent); }
 <section>
   <h2>Customer report</h2>
   <p>A script writes one row per test case with the predicted class and a suggested action, such as a DVR for a sag or a UPS for an interruption. It also writes a plain-text summary. The actions are indicative only.</p>
-  <div class="warn">
-    <p style="margin:0"><b>Not yet run.</b> The report's numbers and graphs will be added after the MATLAB run.</p>
+  <div class="grid2">
+    <div>
+      <p><b>Run on the 7-class wavelet data (holdout, 124 test rows):</b></p>
+      <table>
+        <tr><th>Result</th><th class="n">Value</th></tr>
+        <tr><td>Test rows</td><td class="n">124</td></tr>
+        <tr><td>Correct</td><td class="n">124</td></tr>
+        <tr><td>Accuracy</td><td class="n">100.00%</td></tr>
+      </table>
+    </div>
+    <div>
+      <p><b>Recall per class:</b> Flicker 100%, Harmonics 100%, Healthy 100%, Interruption 100%, Oscillatory transient 100%, Sag 100%, Swell 100%.</p>
+      <p class="note">Simulated data. The actions are indicative only, not an engineering decision.</p>
+    </div>
   </div>
 </section>
 
@@ -273,5 +286,6 @@ run_mendeley_report       % customer report</pre>
   });
 })();
 </script>
+<p style="margin-top:32px;font-size:14px;color:var(--muted)">Code, data notes and MATLAB files: <a href="https://github.com/SumaAcharya/MinorProject">github.com/SumaAcharya/MinorProject</a></p>
 </body>
 </html>
