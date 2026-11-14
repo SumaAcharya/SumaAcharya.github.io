@@ -167,12 +167,11 @@ a { color: var(--accent); }
 
 <section>
   <h2>Reference paper and research gap</h2>
-  <p><b>Reference:</b> Zhao, Shang and Sun (2019), <i>Power quality disturbance classification based on time-frequency domain multi-feature and decision tree</i>, Protection and Control of Modern Power Systems 4, 27 (Springer). DOI 10.1186/s41601-019-0139-z. <a href="https://link.springer.com/article/10.1186/s41601-019-0139-z" target="_blank" rel="noopener">Read the paper</a></p>
+  <p><b>Reference:</b> Xu et al. (2026), <i>A power quality disturbance classification method using a hybrid transformer and discrete wavelet transform model</i>, Electric Power Systems Research 253, 112547 (Elsevier). DOI 10.1016/j.epsr.2025.112547. <a href="https://www.sciencedirect.com/science/article/abs/pii/S0378779625011344" target="_blank" rel="noopener">Read the paper</a></p>
   <ul>
-    <li><b>Closest to our method:</b> it also uses wavelet features with a decision tree to name the disturbance.</li>
-    <li><b>Gap in that paper:</b> it was tested on simulated signals with added noise. The authors say applying it to practical, field-measured classification still needs further research.</li>
-    <li><b>What this project adds:</b> it is trained and tested on two public Mendeley datasets, not only signals we generated. It also checks stability with 5-fold cross-validation and 10 repeated splits.</li>
-    <li><b>Still open here:</b> noise robustness and field recordings. This project does not test either.</li>
+    <li><b>Closest to our idea:</b> it combines wavelet (DWT) and FFT features, like the hybrid plan in Phase 1.</li>
+    <li><b>Gap in that paper:</b> it relies on 1,000 generated signals per class. The real-signal tests are not described in the sections we could read.</li>
+    <li><b>What this project adds:</b> it uses two public Mendeley datasets instead of generated signals. It also checks stability with 5-fold cross-validation and 10 repeated splits.</li>
   </ul>
 </section>
 
