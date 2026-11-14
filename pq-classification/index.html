@@ -170,13 +170,13 @@ a { color: var(--accent); }
   <div class="table-wrap">
   <table>
     <tr><th>Noise (SNR)</th><th class="n">Holdout (70/30)</th><th class="n">5-fold CV</th><th class="n">Trained at 50 dB, tested here</th></tr>
-    <tr><td>20 dB</td><td class="n">95.05%</td><td class="n">95.11% ± 0.52</td><td class="n">66.36%</td></tr>
-    <tr><td>30 dB</td><td class="n">98.81%</td><td class="n">98.80% ± 0.18</td><td class="n">82.89%</td></tr>
-    <tr><td>40 dB</td><td class="n">99.14%</td><td class="n">99.34% ± 0.18</td><td class="n">85.81%</td></tr>
-    <tr><td>50 dB</td><td class="n">99.33%</td><td class="n">99.36% ± 0.18</td><td class="n">99.81%</td></tr>
+    <tr><td>20 dB</td><td class="n">95.62%</td><td class="n">95.20% ± 0.70</td><td class="n">73.21%</td></tr>
+    <tr><td>30 dB</td><td class="n">98.90%</td><td class="n">98.81% ± 0.31</td><td class="n">82.91%</td></tr>
+    <tr><td>40 dB</td><td class="n">99.38%</td><td class="n">99.27% ± 0.11</td><td class="n">85.80%</td></tr>
+    <tr><td>50 dB</td><td class="n">98.90%</td><td class="n">99.30% ± 0.20</td><td class="n">99.81%</td></tr>
   </table>
   </div>
-  <p class="note">The first two columns train and test at the same noise level. The last column trains once on clean (50 dB) signals and tests on noisier ones. It drops to 66% at 20 dB, so a real system should be trained on data with noise like its own.</p>
+  <p class="note">The first two columns train and test at the same noise level. The last column trains once on clean (50 dB) signals and tests on noisier ones. It drops to about 73% at 20 dB, so a real system should be trained on data with noise like its own. These numbers are from the MATLAB run; the figures below come from the Python run, which gives the same pattern (66% for the 20 dB cell).</p>
 
   <div class="grid2">
     <figure style="margin:0">
