@@ -166,12 +166,23 @@ a { color: var(--accent); }
 </section>
 
 <section>
-  <h2>Reference paper and research gap</h2>
-  <p><b>Reference:</b> Xu et al. (2026), <i>A power quality disturbance classification method using a hybrid transformer and discrete wavelet transform model</i>, Electric Power Systems Research 253, 112547 (Elsevier). DOI 10.1016/j.epsr.2025.112547. <a href="https://www.sciencedirect.com/science/article/abs/pii/S0378779625011344" target="_blank" rel="noopener">Read the paper</a></p>
+  <h2>Reference papers and research gap</h2>
+  <p><b>1. Xu et al. (2026)</b>, <i>A power quality disturbance classification method using a hybrid transformer and discrete wavelet transform model</i>, Electric Power Systems Research 253, 112547 (Elsevier). DOI 10.1016/j.epsr.2025.112547. <a href="https://www.sciencedirect.com/science/article/abs/pii/S0378779625011344" target="_blank" rel="noopener">Read the paper</a></p>
   <ul>
     <li><b>Closest to our idea:</b> it combines wavelet (DWT) and FFT features, like the hybrid plan in Phase 1.</li>
-    <li><b>Gap in that paper:</b> it relies on 1,000 generated signals per class. The real-signal tests are not described in the sections we could read.</li>
-    <li><b>What this project adds:</b> it uses two public Mendeley datasets instead of generated signals. It also checks stability with 5-fold cross-validation and 10 repeated splits.</li>
+    <li><b>Its data:</b> 1,000 generated signals per class. The real-signal tests are not described in the sections we could read.</li>
+  </ul>
+  <p><b>2. Zhao, Shang and Sun (2019)</b>, <i>Power quality disturbance classification based on time-frequency domain multi-feature and decision tree</i>, Protection and Control of Modern Power Systems 4, 27 (Springer). DOI 10.1186/s41601-019-0139-z. <a href="https://link.springer.com/article/10.1186/s41601-019-0139-z" target="_blank" rel="noopener">Read the paper</a></p>
+  <ul>
+    <li><b>Closest to our method:</b> wavelet features with a decision tree to name the disturbance.</li>
+    <li><b>Its data:</b> simulated signals with added noise. The authors say practical classification still needs further research.</li>
+  </ul>
+  <p><b>What this project adds:</b></p>
+  <ul>
+    <li>Both comparison papers use their own generated data. This project uses two public Mendeley datasets that anyone can download and check.</li>
+    <li>Results are reported with 5-fold cross-validation and 10 repeated splits, so the spread of scores is visible, not only one number.</li>
+    <li>It tests two feature types, wavelet and STFT, on separate public datasets, and shows which feature groups matter most.</li>
+    <li>It turns a predicted class into an indicative action, with a customer-style report.</li>
   </ul>
 </section>
 
