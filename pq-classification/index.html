@@ -161,17 +161,17 @@ a { color: var(--accent); }
     </div>
     <div>
       <p><b>Recall per class:</b> Flicker 100%, Harmonics 100%, Healthy 100%, Interruption 100%, Oscillatory transient 100%, Sag 100%, Swell 100%.</p>
-      <p class="note">Simulated data. The actions are indicative only, not an engineering decision.</p>
     </div>
   </div>
 </section>
 
 <section>
-  <h2>What is not covered</h2>
+  <h2>Reference paper and research gap</h2>
+  <p><b>Reference:</b> Anwar, Baig, Shaikh and Abro (2025), <i>Detection and classification of power quality disturbances: Vision transformers vs. CNN</i>, AIMS Energy 13(5): 1052–1075. <a href="https://www.aimspress.com/aimspress-data/aimse/2025/5/PDF/energy-13-05-039.pdf" target="_blank" rel="noopener">Read the paper</a></p>
   <ul>
-    <li><b>Hybrid FFT + DWT test:</b> not possible on these datasets. It needs both feature types from the same raw signals.</li>
-    <li><b>Severity scoring:</b> not included. It needs measured magnitude and duration, which the data does not contain.</li>
-    <li><b>Field validation:</b> none. Real recordings with noise and overlapping events have not been tested.</li>
+    <li><b>Gap in that paper:</b> it used only synthetic, noise-free signals. It leaves low-noise robustness and testing on public or field-measured datasets for future work.</li>
+    <li><b>What this project adds:</b> it is trained and tested on two public Mendeley datasets, not only signals we generated. It also checks stability with 5-fold cross-validation and 10 repeated splits.</li>
+    <li><b>Still open here:</b> noise and field recordings. These are the same gaps the paper names, so this project does not close them.</li>
   </ul>
 </section>
 
