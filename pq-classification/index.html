@@ -207,6 +207,18 @@ a { color: var(--accent); }
 
   <p class="note" style="margin-top:14px"><b>Run these graphs in MATLAB:</b> <a href="https://matlab.mathworks.com/open/github/v1?repo=SumaAcharya/MinorProject&amp;file=show_github_pqd.m" target="_blank" rel="noopener">Open show_github_pqd in MATLAB Online</a>, then type <code>show_github_pqd</code> in the Command Window.</p>
 
+  <h3>Baseline comparison: same splits, four models</h3>
+  <div class="table-wrap">
+  <table>
+    <tr><th>Noise</th><th class="n">Decision tree</th><th class="n">SVM (RBF)</th><th class="n">Random forest</th><th class="n">Small 1D CNN</th></tr>
+    <tr><td>20 dB</td><td class="n">95.05% (CV 95.11)</td><td class="n">95.52% (CV 95.80)</td><td class="n">96.38% (CV 96.47)</td><td class="n">97.95%</td></tr>
+    <tr><td>30 dB</td><td class="n">98.81% (CV 98.80)</td><td class="n">98.86% (CV 98.83)</td><td class="n">99.29% (CV 99.23)</td><td class="n">99.71%</td></tr>
+    <tr><td>40 dB</td><td class="n">99.14% (CV 99.34)</td><td class="n">99.43% (CV 99.46)</td><td class="n">99.48% (CV 99.47)</td><td class="n">99.90%</td></tr>
+    <tr><td>50 dB</td><td class="n">99.33% (CV 99.36)</td><td class="n">99.48% (CV 99.50)</td><td class="n">99.52% (CV 99.61)</td><td class="n">99.76%</td></tr>
+  </table>
+  </div>
+  <p class="note">Holdout scores (70/30 stratified, seed 42) unless marked CV (5-fold). The three classical models use the same 11 electrical features. The CNN reads the raw 640-sample voltage and was trained once, so it has no CV spread. Differences of about 0.5 points are within the CV spread and should not be read as a ranking.</p>
+
   <div class="warn" style="margin-top:14px">
     <p style="margin:0"><b>Limits:</b> the dataset has voltage only, so there is no current analysis. The signals are simulated, so these results show how well the features separate the classes, not how a real meter would perform. The features are our own measures, not the Mendeley features, so the numbers can't be compared with the Mendeley results. These numbers and figures come from a Python run on the same files. The MATLAB script <code>show_github_pqd.m</code> repeats the analysis; it is written but not yet run in MATLAB, and its numbers may differ slightly because of how the random splits are generated.</p>
   </div>
