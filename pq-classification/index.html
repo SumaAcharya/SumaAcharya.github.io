@@ -71,6 +71,16 @@ a { color: var(--accent); }
 </section>
 
 <section>
+  <h2>What is new here</h2>
+  <p>Wavelet features with decision trees, forests or neural networks are already widely studied for PQ classification. This project does not claim the idea itself is new. It adds three things:</p>
+  <ul>
+    <li><b>Same splits for every model:</b> the decision tree, SVM, random forest and CNN are compared on identical 70/30 splits, with 5-fold cross-validation and repeated splits, on public data anyone can download.</li>
+    <li><b>Noise-robust training:</b> a tree trained only on clean (50 dB) signals falls to about 66% at 20 dB. Training on all noise levels together keeps the CNN at 98.5% at 20 dB (average of five runs).</li>
+    <li><b>Wavelet and electrical features compared on the same signals:</b> at 20 dB the random forest reaches 97.3% with both feature types, against 95.7% with wavelet features alone and 89.6% with electrical features alone.</li>
+  </ul>
+</section>
+
+<section>
   <h2>Main results</h2>
   <h3>Wavelet features (Mendeley dataset)</h3>
   <div class="table-wrap">
