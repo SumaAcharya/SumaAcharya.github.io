@@ -55,39 +55,41 @@ a { color: var(--accent); }
   <div class="kpis">
     <div class="kpi"><div class="v">100%</div><div class="k">Wavelet data, 7 classes (holdout)</div></div>
     <div class="kpi"><div class="v">98.80%</div><div class="k">Wavelet data, 5-fold CV</div></div>
-    <div class="kpi"><div class="v">97.5%</div><div class="k">Voltage data at 20 dB noise (random forest)</div></div>
-    <div class="kpi"><div class="v">99.9%</div><div class="k">Voltage data at 40 dB noise (random forest)</div></div>
+    <div class="kpi"><div class="v">97.3%</div><div class="k">Wavelet + voltage features at 20 dB noise (random forest)</div></div>
+    <div class="kpi"><div class="v">99.9%</div><div class="k">Wavelet + voltage features at 40 dB noise (random forest)</div></div>
   </div>
 </section>
 
 <section>
   <h2>What we did</h2>
   <ul>
-    <li><b>Got the data:</b> two public Mendeley datasets (wavelet and FFT features) and one public GitHub dataset of raw voltage waveforms.</li>
+    <li><b>Got the data:</b> a public Mendeley dataset of wavelet features, and a public GitHub dataset of raw voltage waveforms.</li>
     <li><b>Tested fairly:</b> 70% of the data for training, 30% kept aside to test. We also used 5-fold cross-validation, and the same split for every model.</li>
     <li><b>Compared models:</b> a decision tree (easy to read), SVM, random forest and a small neural network (CNN).</li>
+    <li><b>Focused on wavelets:</b> the frequency-domain (FFT and STFT) analysis has been removed, so every result here uses wavelet features or time-domain voltage features.</li>
   </ul>
 </section>
 
 <section>
   <h2>Main results</h2>
+  <h3>Wavelet features (Mendeley dataset)</h3>
   <div class="table-wrap">
   <table>
     <tr><th>Data</th><th class="n">Holdout</th><th class="n">5-fold CV</th></tr>
     <tr><td>Wavelet features, 7 classes</td><td class="n">100.00%</td><td class="n">98.80%</td></tr>
-    <tr><td>FFT (STFT) codes 0 to 4</td><td class="n">98.67%</td><td class="n">99.80%</td></tr>
+    <tr><td>Wavelet features, 13 labels</td><td class="n">97.78%</td><td class="n">98.27%</td></tr>
   </table>
   </div>
-  <h3>Voltage waveforms: which model works best</h3>
+  <h3>Voltage waveforms (GitHub dataset): which model works best</h3>
   <div class="table-wrap">
   <table>
     <tr><th>Noise</th><th class="n">Decision tree</th><th class="n">Random forest</th><th class="n">Small CNN</th></tr>
-    <tr><td>20 dB (very noisy)</td><td class="n">95.05%</td><td class="n">96.38%</td><td class="n">97.95%</td></tr>
-    <tr><td>50 dB (clean)</td><td class="n">99.33%</td><td class="n">99.52%</td><td class="n">99.76%</td></tr>
+    <tr><td>20 dB (very noisy)</td><td class="n">86.24%</td><td class="n">89.57%</td><td class="n">97.95%</td></tr>
+    <tr><td>50 dB (clean)</td><td class="n">99.24%</td><td class="n">99.52%</td><td class="n">99.76%</td></tr>
   </table>
   </div>
-  <p class="note">The CNN does best in noise because it reads the full voltage wave, while the other models only see 11 summary numbers. Differences of about 0.5 points are within the normal spread between runs.</p>
-  <p class="note">Training on signals from all noise levels together keeps the decision tree accurate at every level. Training on clean signals only drops it to about 73% at 20 dB.</p>
+  <p class="note">These use six electrical features per signal (RMS, peak and sudden jump). The CNN does best in noise because it reads the full voltage wave, while the other models only see the six summary numbers. Adding the wavelet features to the electrical ones raises the random forest to 97.33% at 20 dB and 99.52% at 30 dB.</p>
+  <p class="note">Training on clean (50 dB) signals only drops the decision tree to about 66% at 20 dB. Training on all noise levels together brings the CNN to 98.5% at 20 dB (average of five runs).</p>
 </section>
 
 <section>
@@ -99,7 +101,7 @@ a { color: var(--accent); }
     </figure>
     <figure style="margin:0">
       <img class="fig" src="figures/4_noise_robustness.png" alt="Accuracy against noise level for two training choices">
-      <figcaption class="note">Accuracy against noise level. Training at each level stays above 95%.</figcaption>
+      <figcaption class="note">Decision tree accuracy against noise level. Trained and tested at each level it falls to 86% at 20 dB; trained at 50 dB only, it falls to 66%.</figcaption>
     </figure>
   </div>
   <p class="note" style="margin-top:12px"><b>See the MATLAB graphs:</b> <a href="https://matlab.mathworks.com/open/github/v1?repo=SumaAcharya/MinorProject&amp;file=show_github_pqd.m" target="_blank" rel="noopener">Open show_github_pqd in MATLAB Online</a>, then type <code>show_github_pqd</code> in the Command Window.</p>
@@ -122,7 +124,7 @@ a { color: var(--accent); }
 <section>
   <h2>Limits</h2>
   <div class="warn">
-    <p style="margin:0">The data is simulated, so these results show how well the features separate the classes, not how a real meter would perform. The voltage data has no current measurements. The features in the voltage analysis are our own, so those numbers can't be compared directly with the Mendeley results.</p>
+    <p style="margin:0">The data is simulated, so these results show how well the features separate the classes, not how a real meter would perform. The voltage data has no current measurements. The voltage features are our own, so those numbers can't be compared directly with the Mendeley results.</p>
   </div>
 </section>
 
@@ -131,14 +133,14 @@ a { color: var(--accent); }
   <p class="note">The MATLAB scripts and Python code are in the GitHub repository. The first run of the voltage analysis downloads about 260 MB.</p>
   <pre>clear functions
 run_mendeley_project      % wavelet results
-run_stft_benchmark        % FFT results
 run_mendeley_report       % customer report
-show_github_pqd          % voltage waveforms and noise test</pre>
+show_github_pqd           % voltage waveforms and noise test
+show_ml_comparison        % model comparison charts</pre>
   <p class="note" style="margin-top:10px">Code and data notes: <a href="https://github.com/SumaAcharya/MinorProject">github.com/SumaAcharya/MinorProject</a></p>
 </section>
 
 <footer>
-  Datasets: Veeramsetty et al. (2026), PQ Disturbances Dataset V4, Mendeley Data, DOI 10.17632/nkdpg8mn4f.4 (CC BY 4.0). Veeramsetty, Madgula and Durgam (2026), PQ Issues Using STFT V2, Mendeley Data, DOI 10.17632/w36rk7vh93.2 (CC BY 4.0). Shao, Henriques, Morais and Tedeschi, PQD-1D-model, GitHub (HanShaoll/PQD-1D-model) and IEEE DataPort (power quality disturbance waveform-1D data and model).
+  Dataset: Veeramsetty et al. (2026), PQ Disturbances Dataset V4, Mendeley Data, DOI 10.17632/nkdpg8mn4f.4 (CC BY 4.0). Shao, Henriques, Morais and Tedeschi, PQD-1D-model, GitHub (HanShaoll/PQD-1D-model) and IEEE DataPort (power quality disturbance waveform-1D data and model).
 </footer>
 
 </main>
