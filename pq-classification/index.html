@@ -13,23 +13,19 @@
 * { box-sizing: border-box; }
 body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.6 system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
   padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 28px; }
-main { max-width: 980px; margin: 0 auto; display: flex; flex-direction: column; gap: 18px; }
-header h1 { font-size: 28px; margin: 0 0 6px; line-height: 1.25; }
-header p { margin: 0; color: var(--muted); }
-section { background: var(--panel); border: 1px solid var(--rule); border-radius: 12px; padding: 22px 24px; }
+main { max-width: 900px; margin: 0 auto; display: flex; flex-direction: column; gap: 18px; }
+h1 { font-size: 28px; margin: 0 0 6px; line-height: 1.25; }
 h2 { font-size: 20px; margin: 0 0 10px; color: var(--accent); }
-h3 { font-size: 16px; margin: 16px 0 6px; }
+h3 { font-size: 16px; margin: 14px 0 6px; }
 p { margin: 0 0 10px; }
 ul { margin: 0 0 8px; padding-left: 20px; }
 li { margin-bottom: 5px; }
-.kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-top: 4px; }
+section { background: var(--panel); border: 1px solid var(--rule); border-radius: 12px; padding: 22px 24px; }
+.lead { color: var(--muted); margin: 0; }
+.kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; }
 .kpi { border: 1px solid var(--rule); border-radius: 10px; padding: 12px 14px; }
 .kpi .v { font-size: 26px; font-weight: 700; color: var(--accent2); line-height: 1.2; }
 .kpi .k { font-size: 13px; color: var(--muted); }
-.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
-@media (max-width: 760px) { .grid2 { grid-template-columns: 1fr; } }
-.chart { position: relative; height: 280px; width: 100%; }
-.chart.tall { height: 320px; }
 .note { font-size: 14px; color: var(--muted); margin: 0 0 8px; }
 .warn { background: var(--warn); border-left: 3px solid var(--warnline); border-radius: 8px; padding: 12px 14px; }
 .table-wrap { overflow-x: auto; }
@@ -37,10 +33,11 @@ table { width: 100%; border-collapse: collapse; font-size: 15px; }
 th, td { text-align: left; padding: 8px; border-bottom: 1px solid var(--rule); }
 th { color: var(--muted); font-weight: 600; font-size: 13px; }
 td.n, th.n { text-align: right; font-variant-numeric: tabular-nums; }
-.cm td { text-align: center; font-variant-numeric: tabular-nums; }
-.cm td.diag { font-weight: 700; }
 code { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 13px; background: var(--bg); padding: 2px 5px; border-radius: 4px; }
 pre { background: var(--bg); border: 1px solid var(--rule); border-radius: 8px; padding: 12px 14px; overflow-x: auto; font-size: 13.5px; margin: 8px 0 0; }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+@media (max-width: 760px) { .grid2 { grid-template-columns: 1fr; } }
+img.fig { width: 100%; height: auto; border: 1px solid var(--rule); border-radius: 8px; background: #fff; }
 footer { font-size: 13px; color: var(--muted); text-align: center; padding: 4px 0 10px; }
 a { color: var(--accent); }
 </style>
@@ -50,229 +47,94 @@ a { color: var(--accent); }
 
 <header>
   <h1>Power Quality Disturbance Classification</h1>
-  <p>A decision tree trained on public datasets (two Mendeley sets and one GitHub set), run in MATLAB. Simulated data.</p>
+  <p class="lead">A simple classifier that names the type of power quality problem from its signal, and suggests a first action. All data is simulated.</p>
 </header>
 
 <section>
-  <h2>Summary</h2>
+  <h2>In short</h2>
   <div class="kpis">
-    <div class="kpi"><div class="v">100%</div><div class="k">Wavelet, 7 classes, holdout</div></div>
-    <div class="kpi"><div class="v">98.80%</div><div class="k">Wavelet, 7 classes, 5-fold CV</div></div>
-    <div class="kpi"><div class="v">98.67%</div><div class="k">FFT (STFT), holdout (2 wrong of 150)</div></div>
-    <div class="kpi"><div class="v">99.80%</div><div class="k">FFT (STFT), 5-fold CV</div></div>
+    <div class="kpi"><div class="v">100%</div><div class="k">Wavelet data, 7 classes (holdout)</div></div>
+    <div class="kpi"><div class="v">98.80%</div><div class="k">Wavelet data, 5-fold CV</div></div>
+    <div class="kpi"><div class="v">97.5%</div><div class="k">Voltage data at 20 dB noise (random forest)</div></div>
+    <div class="kpi"><div class="v">99.9%</div><div class="k">Voltage data at 40 dB noise (random forest)</div></div>
   </div>
 </section>
 
 <section>
-  <h2>The data</h2>
+  <h2>What we did</h2>
   <ul>
-    <li><b>Wavelet dataset (PQ Disturbances V4):</b> 750 rows, 72 wavelet statistics each (54,000 numbers in total). 414 rows belong to the 7 single-event classes (29,808 numbers).</li>
-    <li><b>FFT dataset (PQ Issues Using STFT V2):</b> 500 rows, 794 STFT values each (397,000 numbers in total). It has 5 codes (0 to 4), 100 rows each. The file doesn't name them.</li>
-    <li><b>Voltage dataset (HanShaoll PQD-1D-model, GitHub):</b> the 7 base classes at 4 noise levels (20, 30, 40 and 50 dB). Each file has 1,000 signals, and each signal is 0.2 s of voltage at 3.2 kHz (640 samples). That is 28 files and 17,920,000 numbers in total. These are raw waveforms, not features. Download: <a href="https://github.com/HanShaoll/PQD-1D-model/tree/main/PQD%20dataset" target="_blank" rel="noopener">GitHub, PQD-1D-model, PQD dataset folder</a>, or <a href="https://ieee-dataport.org/documents/power-quality-disturbance-waveform-1d-data-and-model" target="_blank" rel="noopener">IEEE DataPort, waveform-1D data and model</a>.</li>
-  </ul>
-  <p class="note">The two Mendeley sets are used as published, and each row holds derived features. The GitHub set is simulated to IEEE 1159-2019 definitions, and its files are used as published.</p>
-</section>
-
-<section>
-  <h2>How it was tested</h2>
-  <ul>
-    <li><b>Holdout:</b> 70% of rows to train, 30% kept aside for testing (seed 42, same class mix in both parts).</li>
-    <li><b>5-fold cross-validation:</b> the data is cut into 5 parts, each tested once, and the scores are averaged.</li>
-    <li><b>10 repeated splits:</b> the holdout test is repeated with 10 random seeds, to see how much the score moves.</li>
+    <li><b>Got the data:</b> two public Mendeley datasets (wavelet and FFT features) and one public GitHub dataset of raw voltage waveforms.</li>
+    <li><b>Tested fairly:</b> 70% of the data for training, 30% kept aside to test. We also used 5-fold cross-validation, and the same split for every model.</li>
+    <li><b>Compared models:</b> a decision tree (easy to read), SVM, random forest and a small neural network (CNN).</li>
   </ul>
 </section>
 
 <section>
-  <h2>Results</h2>
+  <h2>Main results</h2>
   <div class="table-wrap">
   <table>
-    <tr><th>Dataset</th><th class="n">Holdout</th><th class="n">5-fold CV</th><th class="n">10 splits (mean)</th></tr>
-    <tr><td>Wavelet, 7 classes (414 rows)</td><td class="n">100.00%</td><td class="n">98.80% ± 1.20</td><td class="n">98.39%</td></tr>
-    <tr><td>Wavelet, 13 labels (750 rows)</td><td class="n">97.78%</td><td class="n">98.27% ± 2.03</td><td class="n">98.09%</td></tr>
-    <tr><td>FFT (STFT), codes 0 to 4 (500 rows)</td><td class="n">98.67%</td><td class="n">99.80%</td><td class="n">99.67%</td></tr>
+    <tr><th>Data</th><th class="n">Holdout</th><th class="n">5-fold CV</th></tr>
+    <tr><td>Wavelet features, 7 classes</td><td class="n">100.00%</td><td class="n">98.80%</td></tr>
+    <tr><td>FFT (STFT) codes 0 to 4</td><td class="n">98.67%</td><td class="n">99.80%</td></tr>
   </table>
   </div>
-  <p class="note">Run every graph on this page in MATLAB: <a href="https://matlab.mathworks.com/open/github/v1?repo=SumaAcharya/MinorProject&amp;file=run_all.m" target="_blank" rel="noopener">Open all graphs in MATLAB Online</a>.</p>
-  <p class="note">All numbers are from MATLAB runs. "± 1.20" is the spread across the 5 folds.</p>
-
-  <div class="grid2">
-    <div>
-      <h3>Accuracy by dataset</h3>
-      <div class="chart"><canvas id="accChart" role="img" aria-label="Bar chart of holdout and 5-fold CV accuracy for each dataset"></canvas></div>
-    </div>
-    <div>
-      <h3>Score across 10 random splits</h3>
-      <div class="chart"><canvas id="splitChart" role="img" aria-label="Line chart of holdout accuracy over 10 random splits"></canvas></div>
-    </div>
+  <h3>Voltage waveforms: which model works best</h3>
+  <div class="table-wrap">
+  <table>
+    <tr><th>Noise</th><th class="n">Decision tree</th><th class="n">Random forest</th><th class="n">Small CNN</th></tr>
+    <tr><td>20 dB (very noisy)</td><td class="n">95.05%</td><td class="n">96.38%</td><td class="n">97.95%</td></tr>
+    <tr><td>50 dB (clean)</td><td class="n">99.33%</td><td class="n">99.52%</td><td class="n">99.76%</td></tr>
+  </table>
   </div>
+  <p class="note">The CNN does best in noise because it reads the full voltage wave, while the other models only see 11 summary numbers. Differences of about 0.5 points are within the normal spread between runs.</p>
+  <p class="note">Training on signals from all noise levels together keeps the decision tree accurate at every level. Training on clean signals only drops it to about 73% at 20 dB.</p>
 </section>
 
 <section>
-  <h2>Wavelet route: what the tree used</h2>
-  <div class="grid2">
-    <div>
-      <h3>Top features by importance</h3>
-      <div class="chart"><canvas id="impChart" role="img" aria-label="Horizontal bar chart of the six most important wavelet features"></canvas></div>
-    </div>
-    <div>
-      <h3>One statistic family alone (5-fold CV)</h3>
-      <div class="chart"><canvas id="famChart" role="img" aria-label="Bar chart of cross-validated accuracy for each wavelet statistic family"></canvas></div>
-      <p class="note">Entropy scores 100%, but its values barely change within a class, so treat that number with caution.</p>
-    </div>
-  </div>
-</section>
-
-<section>
-  <h2>FFT route (STFT): what the codes look like</h2>
-  <div class="grid2">
-    <div>
-      <h3>Average feature value per block</h3>
-      <div class="chart tall"><canvas id="profChart" role="img" aria-label="Log-scale line chart of average feature values per block for STFT codes 0 to 4"></canvas></div>
-      <p class="note">Log scale. Codes 0 and 1 are strong in the first 120 features. Codes 2 to 4 are near zero. Values too small to show sit at the bottom.</p>
-    </div>
-    <div>
-      <h3>Confusion matrix (holdout, 150 rows)</h3>
-      <div class="table-wrap">
-      <table class="cm">
-        <tr><th>True \ guessed</th><th class="n">0</th><th class="n">1</th><th class="n">2</th><th class="n">3</th><th class="n">4</th></tr>
-        <tr><td>0</td><td class="diag">30</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
-        <tr><td>1</td><td>0</td><td class="diag">30</td><td>0</td><td>0</td><td>0</td></tr>
-        <tr><td>2</td><td>0</td><td>0</td><td class="diag">30</td><td>0</td><td>0</td></tr>
-        <tr><td>3</td><td>0</td><td>0</td><td>0</td><td class="diag">29</td><td>1</td></tr>
-        <tr><td>4</td><td>0</td><td>0</td><td>0</td><td>1</td><td class="diag">29</td></tr>
-      </table>
-      </div>
-      <p class="note">Only errors: one code 3 guessed as 4, and one code 4 guessed as 3.</p>
-    </div>
-  </div>
-</section>
-
-<section>
-  <h2>Electrical analysis: raw voltage waveforms (GitHub dataset)</h2>
-  <p>The Mendeley sets hold features, not waveforms. This set holds the voltage itself, so we can see what each disturbance does to the signal. The decision tree uses 11 electrical features per signal: RMS levels per cycle, peak, a sudden-jump measure, 3rd, 5th and 7th harmonics, total harmonic distortion (THD) and high-frequency energy.</p>
-
-  <h3>What each class looks like (average over 1,000 signals, 50 dB)</h3>
-  <div class="table-wrap">
-  <table>
-    <tr><th>Class</th><th class="n">Lowest RMS (pu)</th><th class="n">Highest RMS (pu)</th><th class="n">3rd harmonic (%)</th><th class="n">THD (%)</th></tr>
-    <tr><td>Healthy (Normal)</td><td class="n">0.98</td><td class="n">1.02</td><td class="n">0.26</td><td class="n">1.5</td></tr>
-    <tr><td>Sag</td><td class="n">0.52</td><td class="n">1.01</td><td class="n">0.96</td><td class="n">3.5</td></tr>
-    <tr><td>Swell</td><td class="n">1.00</td><td class="n">1.48</td><td class="n">0.52</td><td class="n">2.0</td></tr>
-    <tr><td>Interruption</td><td class="n">0.12</td><td class="n">1.01</td><td class="n">2.60</td><td class="n">8.3</td></tr>
-    <tr><td>Harmonics</td><td class="n">0.99</td><td class="n">1.01</td><td class="n">10.19</td><td class="n">18.3</td></tr>
-    <tr><td>Flicker</td><td class="n">0.87</td><td class="n">1.14</td><td class="n">0.27</td><td class="n">1.5</td></tr>
-    <tr><td>Oscillatory transient</td><td class="n">0.99</td><td class="n">1.05</td><td class="n">0.33</td><td class="n">3.8</td></tr>
-  </table>
-  </div>
-  <p class="note">RMS is in per-unit of the 1.0 pu peak, measured on each 50 Hz cycle and then averaged. A lowest RMS near 0.12 means the voltage almost disappears. Sag and interruption show up in the level, harmonics in the distortion, and flicker in the slow swing of the level.</p>
-
-  <h3>Accuracy at each noise level</h3>
-  <div class="table-wrap">
-  <table>
-    <tr><th>Noise (SNR)</th><th class="n">Holdout (70/30)</th><th class="n">5-fold CV</th><th class="n">Trained at 50 dB, tested here</th></tr>
-    <tr><td>20 dB</td><td class="n">95.62%</td><td class="n">95.20% ± 0.70</td><td class="n">73.21%</td></tr>
-    <tr><td>30 dB</td><td class="n">98.90%</td><td class="n">98.81% ± 0.31</td><td class="n">82.91%</td></tr>
-    <tr><td>40 dB</td><td class="n">99.38%</td><td class="n">99.27% ± 0.11</td><td class="n">85.80%</td></tr>
-    <tr><td>50 dB</td><td class="n">98.90%</td><td class="n">99.30% ± 0.20</td><td class="n">99.81%</td></tr>
-  </table>
-  </div>
-  <p class="note">The first two columns train and test at the same noise level. The last column trains once on clean (50 dB) signals and tests on noisier ones. It drops to about 73% at 20 dB, so a real system should be trained on data with noise like its own. These numbers are from the MATLAB run; the figures below come from the Python run, which gives the same pattern (66% for the 20 dB cell).</p>
-
+  <h2>What the voltage looks like</h2>
   <div class="grid2">
     <figure style="margin:0">
-      <img src="figures/1_voltage_waveforms.png" alt="Voltage waveform for each of the seven classes over 0.2 seconds" style="width:100%;height:auto;border:1px solid var(--rule);border-radius:8px;background:#fff">
-      <figcaption class="note">One signal per class. Sag dips to about half, swell rises above 1.4 pu, interruption drops to zero for about 0.1 s, harmonics distort the peaks, and the oscillatory transient rings at the start.</figcaption>
+      <img class="fig" src="figures/1_voltage_waveforms.png" alt="Voltage waveform for each of the seven classes over 0.2 seconds">
+      <figcaption class="note">One signal per class. Sag dips to about half, swell rises above 1.4 pu, and interruption drops to near zero.</figcaption>
     </figure>
     <figure style="margin:0">
-      <img src="figures/2_rms_envelope_per_class.png" alt="Average RMS voltage over 10 cycles for each class" style="width:100%;height:auto;border:1px solid var(--rule);border-radius:8px;background:#fff">
-      <figcaption class="note">Average RMS per cycle for each class. Sag, swell and interruption leave the 1.0 pu level clearly and recover over the 10 cycles. Normal and harmonics stay on the 1.0 line, and flicker moves only in the first few cycles.</figcaption>
-    </figure>
-    <figure style="margin:0">
-      <img src="figures/3_fft_spectrum_per_class.png" alt="FFT spectrum for each of the seven classes up to 800 Hz" style="width:100%;height:auto;border:1px solid var(--rule);border-radius:8px;background:#fff">
-      <figcaption class="note">Frequency content of each class, up to 800 Hz. Harmonics show peaks at 150, 250 and 350 Hz. Flicker shows small side peaks next to 50 Hz. Sag and interruption spread a little energy around the fundamental.</figcaption>
-    </figure>
-    <figure style="margin:0">
-      <img src="figures/4_noise_robustness.png" alt="Accuracy against noise level for two training choices" style="width:100%;height:auto;border:1px solid var(--rule);border-radius:8px;background:#fff">
-      <figcaption class="note">Accuracy against noise level. Training at each level stays above 95%; training only on clean signals does not transfer to noisy ones.</figcaption>
-    </figure>
-    <figure style="margin:0">
-      <img src="figures/5_decision_tree.png" alt="Top four levels of the decision tree trained at 50 dB" style="width:100%;height:auto;border:1px solid var(--rule);border-radius:8px;background:#fff">
-      <figcaption class="note">Top four levels of the decision tree (trained at 50 dB). Each box shows the feature and threshold it tests.</figcaption>
-    </figure>
-    <figure style="margin:0">
-      <img src="figures/6_confusion_20dB.png" alt="Confusion matrix at 20 dB noise on the holdout set" style="width:100%;height:auto;border:1px solid var(--rule);border-radius:8px;background:#fff">
-      <figcaption class="note">Confusion matrix at 20 dB, holdout set. Rows are the true class and columns the predicted class, so the diagonal is correct.</figcaption>
+      <img class="fig" src="figures/4_noise_robustness.png" alt="Accuracy against noise level for two training choices">
+      <figcaption class="note">Accuracy against noise level. Training at each level stays above 95%.</figcaption>
     </figure>
   </div>
-
-  <p class="note" style="margin-top:14px"><b>Run these graphs in MATLAB:</b> <a href="https://matlab.mathworks.com/open/github/v1?repo=SumaAcharya/MinorProject&amp;file=show_github_pqd.m" target="_blank" rel="noopener">Open show_github_pqd in MATLAB Online</a>, then type <code>show_github_pqd</code> in the Command Window.</p>
-
-  <h3>Baseline comparison: same splits, four models</h3>
-  <div class="table-wrap">
-  <table>
-    <tr><th>Noise</th><th class="n">Decision tree</th><th class="n">SVM (RBF)</th><th class="n">Random forest</th><th class="n">Small 1D CNN</th></tr>
-    <tr><td>20 dB</td><td class="n">95.05% (CV 95.11)</td><td class="n">95.52% (CV 95.80)</td><td class="n">96.38% (CV 96.47)</td><td class="n">97.95%</td></tr>
-    <tr><td>30 dB</td><td class="n">98.81% (CV 98.80)</td><td class="n">98.86% (CV 98.83)</td><td class="n">99.29% (CV 99.23)</td><td class="n">99.71%</td></tr>
-    <tr><td>40 dB</td><td class="n">99.14% (CV 99.34)</td><td class="n">99.43% (CV 99.46)</td><td class="n">99.48% (CV 99.47)</td><td class="n">99.90%</td></tr>
-    <tr><td>50 dB</td><td class="n">99.33% (CV 99.36)</td><td class="n">99.48% (CV 99.50)</td><td class="n">99.52% (CV 99.61)</td><td class="n">99.76%</td></tr>
-  </table>
-  </div>
-  <p class="note">Holdout scores (70/30 stratified, seed 42) unless marked CV (5-fold). The three classical models use the same 11 electrical features. The CNN reads the raw 640-sample voltage and was trained once, so it has no CV spread. Differences of about 0.5 points are within the CV spread and should not be read as a ranking.</p>
-  <p class="note"><b>Why the CNN scores higher:</b> the three classical models see only 11 summary numbers per signal, so any detail those numbers miss is lost. The CNN reads all 640 voltage samples and learns its own filters for the wave shape, so it picks up subtler differences between classes, especially when noise hides them in the summaries. The gap is clearest at 20 dB (about 2.5 points over the tree and 1.6 over random forest) and shrinks to under 0.5 points at 40 dB and above. The trade-off is that the CNN is harder to explain than a tree, needs more computing, and runs only in Python.</p>
-
-  <div class="warn" style="margin-top:14px">
-    <p style="margin:0"><b>Limits:</b> the dataset has voltage only, so there is no current analysis. The signals are simulated, so these results show how well the features separate the classes, not how a real meter would perform. The features are our own measures, not the Mendeley features, so the numbers can't be compared with the Mendeley results. These numbers and figures come from a Python run on the same files. The MATLAB script <code>show_github_pqd.m</code> repeats the analysis; it is written but not yet run in MATLAB, and its numbers may differ slightly because of how the random splits are generated.</p>
-  </div>
+  <p class="note" style="margin-top:12px"><b>See the MATLAB graphs:</b> <a href="https://matlab.mathworks.com/open/github/v1?repo=SumaAcharya/MinorProject&amp;file=show_github_pqd.m" target="_blank" rel="noopener">Open show_github_pqd in MATLAB Online</a>, then type <code>show_github_pqd</code> in the Command Window.</p>
 </section>
 
 <section>
   <h2>Customer report</h2>
-  <p>A script writes one row per test case with the predicted class and a suggested action, such as a DVR for a sag or a UPS for an interruption. It also writes a plain-text summary. The actions are indicative only.</p>
-  <div class="grid2">
-    <div>
-      <p><b>Run on the 7-class wavelet data (holdout, 124 test rows):</b></p>
-      <table>
-        <tr><th>Result</th><th class="n">Value</th></tr>
-        <tr><td>Test rows</td><td class="n">124</td></tr>
-        <tr><td>Correct</td><td class="n">124</td></tr>
-        <tr><td>Accuracy</td><td class="n">100.00%</td></tr>
-      </table>
-    </div>
-    <div>
-      <p><b>Recall per class:</b> Flicker 100%, Harmonics 100%, Healthy 100%, Interruption 100%, Oscillatory transient 100%, Sag 100%, Swell 100%.</p>
-    </div>
+  <p>The model names the problem and suggests a first action, such as a DVR for a sag or a UPS for an interruption. On 124 test cases it was correct every time. The actions are indicative only and depend on the system they are installed in.</p>
+</section>
+
+<section>
+  <h2>Reference papers</h2>
+  <ul>
+    <li><b>Xu et al. (2026)</b>, hybrid transformer and wavelet model. Electric Power Systems Research 253, 112547. DOI 10.1016/j.epsr.2025.112547. <a href="https://www.sciencedirect.com/science/article/abs/pii/S0378779625011344" target="_blank" rel="noopener">Read the paper</a></li>
+    <li><b>Zhao, Shang and Sun (2019)</b>, wavelet features with a decision tree. Protection and Control of Modern Power Systems 4, 27. DOI 10.1186/s41601-019-0139-z. <a href="https://link.springer.com/article/10.1186/s41601-019-0139-z" target="_blank" rel="noopener">Read the paper</a></li>
+  </ul>
+  <p><b>What this project adds:</b> both papers use their own generated data. This project uses public datasets that anyone can download and check, and compares several models on the same splits.</p>
+</section>
+
+<section>
+  <h2>Limits</h2>
+  <div class="warn">
+    <p style="margin:0">The data is simulated, so these results show how well the features separate the classes, not how a real meter would perform. The voltage data has no current measurements. The features in the voltage analysis are our own, so those numbers can't be compared directly with the Mendeley results.</p>
   </div>
 </section>
 
 <section>
-  <h2>Reference papers and research gap</h2>
-  <p><b>1. Xu et al. (2026)</b>, <i>A power quality disturbance classification method using a hybrid transformer and discrete wavelet transform model</i>, Electric Power Systems Research 253, 112547 (Elsevier). DOI 10.1016/j.epsr.2025.112547. <a href="https://www.sciencedirect.com/science/article/abs/pii/S0378779625011344" target="_blank" rel="noopener">Read the paper</a></p>
-  <ul>
-    <li><b>Closest to our idea:</b> it combines wavelet (DWT) and FFT features, like the hybrid plan in Phase 1.</li>
-    <li><b>Its data:</b> 1,000 generated signals per class. The real-signal tests are not described in the sections we could read.</li>
-  </ul>
-  <p><b>2. Zhao, Shang and Sun (2019)</b>, <i>Power quality disturbance classification based on time-frequency domain multi-feature and decision tree</i>, Protection and Control of Modern Power Systems 4, 27 (Springer). DOI 10.1186/s41601-019-0139-z. <a href="https://link.springer.com/article/10.1186/s41601-019-0139-z" target="_blank" rel="noopener">Read the paper</a></p>
-  <ul>
-    <li><b>Closest to our method:</b> wavelet features with a decision tree to name the disturbance.</li>
-    <li><b>Its data:</b> simulated signals with added noise. The authors say practical classification still needs further research.</li>
-  </ul>
-  <p><b>What this project adds:</b></p>
-  <ul>
-    <li>Both comparison papers use their own generated data. This project uses public datasets that anyone can download and check: two Mendeley sets and a GitHub set of raw voltage waveforms.</li>
-    <li>Results are reported with 5-fold cross-validation and 10 repeated splits, so the spread of scores is visible, not only one number.</li>
-    <li>It tests two feature types, wavelet and STFT, on separate public datasets, and shows which feature groups matter most.</li>
-    <li>It turns a predicted class into an indicative action, with a customer-style report.</li>
-  </ul>
-</section>
-
-<section>
-  <h2>Run in MATLAB</h2>
-  <pre>cd('/Users/suma/Hybrid_PQ_Project/clean_mendeley_project')
-clear functions
+  <h2>Run it yourself</h2>
+  <p class="note">The MATLAB scripts and Python code are in the GitHub repository. The first run of the voltage analysis downloads about 260 MB.</p>
+  <pre>clear functions
 run_mendeley_project      % wavelet results
 run_stft_benchmark        % FFT results
 run_mendeley_report       % customer report
-show_github_pqd          % voltage waveforms, electrical features, noise test (downloads about 260 MB first time)</pre>
+show_github_pqd          % voltage waveforms and noise test</pre>
+  <p class="note" style="margin-top:10px">Code and data notes: <a href="https://github.com/SumaAcharya/MinorProject">github.com/SumaAcharya/MinorProject</a></p>
 </section>
 
 <footer>
@@ -280,103 +142,5 @@ show_github_pqd          % voltage waveforms, electrical features, noise test (d
 </footer>
 
 </main>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
-<script>
-(function () {
-  if (typeof Chart === 'undefined') return;
-  var theme = document.documentElement.getAttribute('data-theme');
-  var dark = theme ? theme === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
-  var ink = dark ? '#e6ebef' : '#1d2328';
-  var muted = dark ? '#9aa6b0' : '#5b6670';
-  var grid = dark ? '#2c3640' : '#dfe3e7';
-  var blue = dark ? '#8bbcdf' : '#1f5f8b';
-  var green = dark ? '#6fcfae' : '#2e8b6f';
-  var red = dark ? '#e8775c' : '#b8432a';
-  Chart.defaults.color = muted;
-  Chart.defaults.borderColor = grid;
-
-  function axes(min, max, title) {
-    return {
-      x: { grid: { display: false }, ticks: { color: muted } },
-      y: { min: min, max: max, grid: { color: grid }, ticks: { color: muted },
-           title: { display: !!title, text: title || '', color: muted } }
-    };
-  }
-
-  new Chart(document.getElementById('accChart'), {
-    type: 'bar',
-    data: { labels: ['Wavelet, 7 classes', 'Wavelet, 13 labels', 'FFT (STFT), 5 codes'],
-      datasets: [
-        { label: 'Holdout (%)', data: [100, 97.78, 98.67], backgroundColor: blue, borderRadius: 3 },
-        { label: '5-fold CV (%)', data: [98.80, 98.27, 99.80], backgroundColor: green, borderRadius: 3 }
-      ] },
-    options: { responsive: true, maintainAspectRatio: false,
-      scales: axes(95, 101, 'Accuracy (%)'),
-      plugins: { legend: { labels: { color: ink } },
-        tooltip: { callbacks: { label: function (c) { return c.dataset.label + ': ' + c.parsed.y.toFixed(2) + '%'; } } } } }
-  });
-
-  new Chart(document.getElementById('splitChart'), {
-    type: 'line',
-    data: { labels: ['1','2','3','4','5','6','7','8','9','10'],
-      datasets: [
-        { label: 'Wavelet, 7 classes', data: [100,95.161,100,100,98.387,95.968,97.581,98.387,99.194,99.194], borderColor: blue, backgroundColor: blue, tension: 0.2, pointRadius: 3, borderWidth: 2 },
-        { label: 'FFT (STFT)', data: [100,100,98.67,100,98.67,100,100,100,99.33,100], borderColor: green, backgroundColor: green, tension: 0.2, pointRadius: 3, borderWidth: 2, borderDash: [5,4] }
-      ] },
-    options: { responsive: true, maintainAspectRatio: false,
-      interaction: { mode: 'index', intersect: false },
-      scales: Object.assign(axes(94, 101, 'Holdout accuracy (%)'), {
-        x: { title: { display: true, text: 'Random split number', color: muted }, grid: { display: false }, ticks: { color: muted } } }),
-      plugins: { legend: { labels: { color: ink } },
-        tooltip: { callbacks: { label: function (c) { return c.dataset.label + ': ' + c.parsed.y.toFixed(2) + '%'; } } } } }
-  });
-
-  new Chart(document.getElementById('impChart'), {
-    type: 'bar',
-    data: { labels: ['Mean-d4','Skewness-A8','Range-d1','Range-d6','Mean-d7','Mean-d1'],
-      datasets: [{ label: 'Importance', data: [0.02693,0.02601,0.02372,0.02341,0.02252,0.01979], backgroundColor: blue, borderRadius: 3 }] },
-    options: { responsive: true, maintainAspectRatio: false, indexAxis: 'y',
-      scales: { x: { grid: { color: grid }, ticks: { color: muted } }, y: { grid: { display: false }, ticks: { color: ink } } },
-      plugins: { legend: { display: false },
-        tooltip: { callbacks: { label: function (c) { return 'Importance ' + c.parsed.x.toFixed(4); } } } } }
-  });
-
-  var famNames = ['Mean','Std','RMS','Energy','Entropy','Kurtosis','Skewness','Range'];
-  var famAcc = [97.34,96.86,96.62,93.73,100,99.52,99.27,99.04];
-  new Chart(document.getElementById('famChart'), {
-    type: 'bar',
-    data: { labels: famNames, datasets: [{ label: 'CV accuracy (%)', data: famAcc,
-      backgroundColor: famNames.map(function (n) { return n === 'Entropy' ? red : blue; }), borderRadius: 3 }] },
-    options: { responsive: true, maintainAspectRatio: false,
-      scales: axes(90, 101, '5-fold CV accuracy (%)'),
-      plugins: { legend: { display: false },
-        tooltip: { callbacks: { label: function (c) { return c.parsed.y.toFixed(2) + '%'; } } } } }
-  });
-
-  var bands = ['1-40','41-80','81-120','121-160','161-200','201-240','241-280','281-320','321-360','361-400','401-440','441-480','481-520','521-560','561-599','600-638','639-677','678-716','717-755','756-794'];
-  function floorLog(a) { return a.map(function (v) { return Math.max(v, 0.001); }); }
-  new Chart(document.getElementById('profChart'), {
-    type: 'line',
-    data: { labels: bands, datasets: [
-      { label: 'Code 0', data: floorLog([3.09,31.82,78.15,76.39,28.96,1.4,0.68,0.42,0.24,0.23,0.18,0.15,0.13,0.11,0.1,0.07,0.09,0.09,0.08,0.07]), borderColor: blue, backgroundColor: blue, tension: 0.2, pointRadius: 2, borderWidth: 2 },
-      { label: 'Code 1', data: floorLog([2.56,39.43,94.47,84.42,28.64,1.2,0.57,0.36,0.19,0.2,0.16,0.13,0.11,0.09,0.09,0.06,0.08,0.07,0.07,0.06]), borderColor: green, backgroundColor: green, tension: 0.2, pointRadius: 2, borderWidth: 2, borderDash: [5,4] },
-      { label: 'Code 2', data: floorLog([0.03,0.02,0.01,0.01,0.01,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]), borderColor: red, backgroundColor: red, tension: 0.2, pointRadius: 2, borderWidth: 2 },
-      { label: 'Code 3', data: floorLog([0.02,0.01,0.01,0,0,0,0,0,0,0.01,0,0,0,0,0,0,0,0,0,0]), borderColor: muted, backgroundColor: muted, tension: 0.2, pointRadius: 2, borderWidth: 2, borderDash: [2,3] },
-      { label: 'Code 4', data: floorLog([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]), borderColor: ink, backgroundColor: ink, tension: 0.2, pointRadius: 2, borderWidth: 1, borderDash: [8,3] }
-    ] },
-    options: { responsive: true, maintainAspectRatio: false,
-      interaction: { mode: 'index', intersect: false },
-      scales: {
-        x: { grid: { display: false }, ticks: { color: muted, maxRotation: 60 }, title: { display: true, text: 'Block of feature numbers', color: muted } },
-        y: { type: 'logarithmic', min: 0.001, max: 100, grid: { color: grid }, ticks: { color: muted },
-             title: { display: true, text: 'Average value (log scale)', color: muted } }
-      },
-      plugins: { legend: { labels: { color: ink } },
-        tooltip: { callbacks: { label: function (c) { return c.dataset.label + ': ' + c.parsed.y.toFixed(3); } } } } }
-  });
-})();
-</script>
-<p style="margin-top:32px;font-size:14px;color:var(--muted)">Code, data notes and MATLAB files: <a href="https://github.com/SumaAcharya/MinorProject">github.com/SumaAcharya/MinorProject</a></p>
 </body>
 </html>
